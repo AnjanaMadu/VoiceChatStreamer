@@ -1,0 +1,46 @@
+{
+    "name": "VoiceChatStreamer",
+    "description": "An Telegram Bot To Stream Videos and Audios in Voice Chat",
+    "stack": "container",
+    "keywords": [
+      "telegram",
+      "voicechat",
+      "bot"
+    ],
+    "env": {
+      "API_ID": {
+        "description": "Your API ID from https://my.telegram.org",
+        "required": true
+      },
+      "API_HASH": {
+        "description": "Your API HASH from https://my.teleram.org",
+        "required": true
+      },
+      "SESSION": {
+        "description": "Get Pyrogram string session from https://replit.com/@AnjanaMadu/GenerateStringSession",
+        "required": true
+      },
+      "ADMINS": {
+        "description": "Add your telegram ID. (Then others can't use your bot. Seperate by spaces)",
+        "required": true
+      },
+      "SESSION_STRING": {
+        "description": "Pyrogram Session String of User Account, get it from @genStr_robot",
+        "required": true
+      },
+      "CHAT_ID": {
+        "description": "ID of your Channel or Group where the bot will works or stream videos",
+        "required": true
+      },
+      "AUTH_USERS": {
+        "description": "Add chat id where bot should work.",
+        "required": true
+      }
+    },
+    "formation": {
+      "worker": {
+        "quantity": 1,
+        "size": "free"
+      }
+    }
+  }
