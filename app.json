@@ -24,16 +24,8 @@
         "description": "Add your telegram ID. (Then others can't use your bot. Seperate by spaces)",
         "required": true
       },
-      "SESSION_STRING": {
-        "description": "Pyrogram Session String of User Account, get it from @genStr_robot",
-        "required": true
-      },
       "CHAT_ID": {
         "description": "ID of your Channel or Group where the bot will works or stream videos",
-        "required": true
-      },
-      "AUTH_USERS": {
-        "description": "Add chat id where bot should work.",
         "required": true
       }
     },
