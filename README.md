@@ -12,6 +12,7 @@ _🎯 Follow me and star this repo for more telegram bots._
 - Play direct video streams.
 - Play videos from youtube in audio and video formats
 - Play via youtube search
+- Telegram video/audio playing
 - Admin control
 
 ## 📌 Deployment
