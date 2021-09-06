@@ -1,6 +1,11 @@
 # Voice Chat Streamer
 _This bot can stream audio or video files and urls in telegram voice chats :)_
 
+![GitHub Repo stars](https://img.shields.io/github/stars/AnjanaMadu/VoiceChatStreamer?color=green&style=for-the-badge&logo=github)
+![GitHub forks](https://img.shields.io/github/forks/AnjanaMadu/VoiceChatStreamer?color=green&style=for-the-badge&logo=github)
+![TG Chat](https://img.shields.io/badge/support-@harp__chat-red?style=for-the-badge&logo=telegram)
+![TG Channel](https://img.shields.io/badge/channel-@harp__tech-red?style=for-the-badge&logo=telegram)
+
 _🎯 Follow me and star this repo for more telegram bots._
 
 ## 📌 Features
@@ -34,7 +39,7 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
   <b>Step 3:</b> Not ask for option. Fill number 1.<br>
   <b>Step 4:</b> Now ask for API ID and API HASH. Fill them.<br>
   <b>Step 5:</b> Now ask for mobile fill it also.<br>
-  <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be here.
+  <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be there.
 </details>
 
 - What is `ADMINS`? Just fill your telegram ID.
