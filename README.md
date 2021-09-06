@@ -3,8 +3,8 @@ _This bot can stream audio or video files and urls in telegram voice chats :)_
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/AnjanaMadu/VoiceChatStreamer?color=green&style=for-the-badge&logo=github)
 ![GitHub forks](https://img.shields.io/github/forks/AnjanaMadu/VoiceChatStreamer?color=green&style=for-the-badge&logo=github)
-![TG Chat](https://img.shields.io/badge/support-@harp__chat-red?style=for-the-badge&logo=telegram)
 ![TG Channel](https://img.shields.io/badge/channel-@harp__tech-red?style=for-the-badge&logo=telegram)
+![TG Chat](https://img.shields.io/badge/dynamic/json?color=red&label=Support&query=online&url=https%3A%2F%2Fonline-users-api.up.railway.app%2Fcheck%3Fchat%3Dharp_chat&style=for-the-badge&logo=telegram)
 
 _🎯 Follow me and star this repo for more telegram bots._
 
