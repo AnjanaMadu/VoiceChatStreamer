@@ -1,1 +1,1 @@
-Bot: python3 main.py
+Bot: python3 -m vcstreamer
