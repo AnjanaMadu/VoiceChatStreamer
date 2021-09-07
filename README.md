@@ -1,10 +1,10 @@
 # Voice Chat Streamer
 _This bot can stream audio or video files and urls in telegram voice chats :)_
 
-![GitHub Repo stars](https://img.shields.io/github/stars/AnjanaMadu/VoiceChatStreamer?color=green&style=for-the-badge&logo=github)
-![GitHub forks](https://img.shields.io/github/forks/AnjanaMadu/VoiceChatStreamer?color=green&style=for-the-badge&logo=github)
-![TG Channel](https://img.shields.io/badge/dynamic/json?color=red&label=channel%20@harp_tech&query=subscribers&url=https%3A%2F%2Fonline-users-api.up.railway.app%2Fcheck%3Fchat%3Dharp_tech&style=for-the-badge&logo=telegram)
-![TG Chat](https://img.shields.io/badge/dynamic/json?color=red&label=support%20@harp_chat&query=online&url=https%3A%2F%2Fonline-users-api.up.railway.app%2Fcheck%3Fchat%3Dharp_chat&style=for-the-badge&logo=telegram)
+![GitHub Repo stars](https://img.shields.io/github/stars/AnjanaMadu/VoiceChatStreamer?color=green&logo=github)
+![GitHub forks](https://img.shields.io/github/forks/AnjanaMadu/VoiceChatStreamer?color=green&logo=github)
+![TG Channel](https://img.shields.io/badge/dynamic/json?color=red&label=channel%20@harp_tech&query=subscribers&url=https%3A%2F%2Fonline-users-api.up.railway.app%2Fcheck%3Fchat%3Dharp_tech&logo=telegram)
+![TG Chat](https://img.shields.io/badge/dynamic/json?color=red&label=support%20@harp_chat&query=online&url=https%3A%2F%2Fonline-users-api.up.railway.app%2Fcheck%3Fchat%3Dharp_chat&logo=telegram)
 
 _🎯 Follow me and star this repo for more telegram bots._
 
