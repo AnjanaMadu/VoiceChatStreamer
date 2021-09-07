@@ -16,8 +16,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import asyncio
 import pyrogram
 import os
-from vcstreamerbot.vctools import VIDEO_CALL
-from vcstreamerbot.vc_clients import bot
+from vcstreamerbot import vctools
+from vcstreamerbot import bot
 
 
 @bot.on_message(filters.regex("^!endvc$"))
@@ -25,5 +25,5 @@ async def leave_vc(client, message):
     CHAT_ID = message.chat.id
     try:
         await message.delete()
-        await VIDEO_CALL[CHAT_ID].stop()
+        await vctools.VIDEO_CALL[CHAT_ID].stop()
     except: pass
