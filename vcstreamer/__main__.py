@@ -17,21 +17,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 import os
 from pyrogram import Client, idle
-from vcstreamer import app, config
-
-bot = Client(
-  "bot",
-  config.API_ID,
-  config.API_HASH,
-  bot_token=config.TOKEN,
-  plugins=dict(root="vcstreamer"),
-)
+from vcstreamer import app
 
 if not os.path.isdir("./downloads"):
   os.makedirs("./downloads")
 
-bot.start()
-app.start()
+app.run()
 print("Bot Started")
-idle()
-print("Bot Stopped")
