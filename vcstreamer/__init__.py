@@ -48,8 +48,6 @@ class vctools():
   STREAM = {8}
   VIDEO_CALL = {}
   group_call_factory = GroupCallFactory(vc_clients.app, GroupCallFactory.MTPROTO_CLIENT_TYPE.PYROGRAM)
-  ydl_opts = {"geo-bypass": True, "nocheckcertificate": True}
-  ydl = YoutubeDL(ydl_opts)
 
 def video_link_getter(url: str, key=None):
   yt = YouTube(url)
