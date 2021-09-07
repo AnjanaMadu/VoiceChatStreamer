@@ -16,8 +16,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import asyncio
 import pyrogram
 import os
-from vcstreamerbot import vctools
-from vcstreamerbot import bot
+from vcstreamer import vctools
+from vcstreamer import bot
 
 
 @bot.on_message(filters.regex("^!endvc$"))
