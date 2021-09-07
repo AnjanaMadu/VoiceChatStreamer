@@ -30,7 +30,7 @@ API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 SESSION = os.environ.get("SESSION")
 ADMINS = os.environ.get("ADMINS")
-CHAT_ID = os.environ.get("CHAT_ID")
+CHAT_ID = int(os.environ.get("CHAT_ID"))
 vcusr = Client(SESSION, API_ID, API_HASH)
 group_call = GroupCallFactory(vcusr, GroupCallFactory.MTPROTO_CLIENT_TYPE.PYROGRAM).get_group_call()
 
