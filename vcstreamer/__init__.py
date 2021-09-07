@@ -20,7 +20,6 @@ import os
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
-from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
 class config():
@@ -67,4 +66,4 @@ def yt_video_search(q: str):
     finalurl = f"https://www.youtube.com/watch?v={videoSearchId}"
     return finalurl
   except:
-    return "Not Found"
+    return 404
