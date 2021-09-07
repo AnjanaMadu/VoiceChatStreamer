@@ -18,6 +18,7 @@ import pyrogram
 import os
 from vcstreamer import vctools
 from vcstreamer import bot
+from pyrogram import filters
 
 
 @bot.on_message(filters.regex("^!endvc$"))
