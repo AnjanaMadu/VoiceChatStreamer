@@ -29,7 +29,7 @@ class config():
     SESSION = os.environ.get("SESSION")
 
 bot = Client(
-  ":memory:",
+  "bot",
   config.API_ID,
   config.API_HASH,
   bot_token=config.TOKEN,
