@@ -30,19 +30,18 @@ class config():
   ADMINS = os.environ.get("ADMINS")
   CHAT_ID = int(os.environ.get("CHAT_ID"))
 
-class vc_clients():
-  bot = Client(
-    "bot",
-    config.API_ID,
-    config.API_HASH,
-    bot_token=config.TOKEN,
-    plugins=dict(root="vcstreamer")
-  )
-  app = Client(
-    config.SESSION,
-    config.API_ID,
-    config.API_HASH
-  )
+bot = Client(
+  "bot",
+  config.API_ID,
+  config.API_HASH,
+  bot_token=config.TOKEN,
+  plugins=dict(root="vcstreamer")
+)
+app = Client(
+  config.SESSION,
+  config.API_ID,
+  config.API_HASH
+)
 
 class vctools():
   STREAM = {8}
