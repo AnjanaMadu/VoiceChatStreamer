@@ -44,7 +44,7 @@ async def play_vc(client, message):
         group_call = vctools.group_call_factory.get_group_call()
         if group_call.is_connected: await group_call.stop()
         await group_call.join(CHAT_ID)
-        await msg.edit(f"Playing.)
+        await msg.edit("__Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
         vctools.VIDEO_CALL[CHAT_ID] = group_call
     except Exception as e:
