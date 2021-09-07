@@ -22,7 +22,7 @@ from vcstreamer import vctools
 from vcstreamer import app
 
 
-@Client.on_message(filters.regex("^!stream"))
+@app.on_message(filters.regex("^!stream"))
 async def stream_vc(client, message):
     CHAT_ID = message.chat.id
     msg = await message.reply("__Please wait.__")

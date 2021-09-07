@@ -16,11 +16,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import asyncio
 import pyrogram
 import os
-from vcstreamer import vctools
+from vcstreamer import vctools, app
 from pyrogram import Client, filters
 
 
-@Client.on_message(filters.regex("^!endvc$"))
+@app.on_message(filters.regex("^!endvc$"))
 async def leave_vc(client, message):
     CHAT_ID = message.chat.id
     try:
