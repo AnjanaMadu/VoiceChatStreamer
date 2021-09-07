@@ -19,8 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 from pyrogram import Client, idle
 from vcstreamer import bot, app
 
-bot.run()
-app.run()
+await bot.start()
+await app.start()
 print("Bot Started")
-idle()
+await idle()
 print("Bot Stopped")
