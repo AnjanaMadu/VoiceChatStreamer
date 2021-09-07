@@ -38,12 +38,15 @@ VIDEO_CALL = {}
 group_call_factory = GroupCallFactory(vcusr, GroupCallFactory.MTPROTO_CLIENT_TYPE.PYROGRAM)
 
 def video_link_getter(url: str, key=None):
-    yt = YouTube(url)
-    if key == "v":
-        x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
-    elif key == "a":
-        x = yt.streams.filter(mime_type="audio/webm", type="audio")[-1].download()
-    return x
+    try:
+        yt = YouTube(url)
+        if key == "v":
+            x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
+        elif key == "a":
+            x = yt.streams.filter(type="audio")[-1].download()
+        return x
+    except:
+        return 500
   
 def yt_video_search(q: str):
     try:
@@ -54,9 +57,15 @@ def yt_video_search(q: str):
     except:
         return 404
 
+@vcusr.on_message(filters.regex("^!help$"))
+async def help_vc(client, message):
+    text = "===== Help Menu =====\n-Play as Audio-\n!play __(reply to audio / youtube url / search query)\n\n-Play as Video-\n!stream __(reply to video / youtube url / search query)"
+    await message.reply(text)
+
 @vcusr.on_message(filters.regex("^!endvc$"))
 async def leave_vc(client, message):
     CHAT_ID = message.chat.id
+    if not str(CHAT_ID).startswith("-100"): return
     try:
         await message.delete()
         await VIDEO_CALL[CHAT_ID].stop()
@@ -65,26 +74,30 @@ async def leave_vc(client, message):
 @vcusr.on_message(filters.regex("^!play"))
 async def play_vc(client, message):
     CHAT_ID = message.chat.id
-    msg = await message.reply("__Please wait.__")
+    if not str(CHAT_ID).startswith("-100"): return
+    msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     if media:
+        await msg.edit("📥 __Downloading...__")
         LOCAL_FILE = await client.download_media(media)
     else:
         try: INPUT_SOURCE = message.text.split(" ", 1)[1]
-        except IndexError: return await message.reply("Give me a URL or Search Query. Look `!help`")
+        except IndexError: return await msg.edit("🔎 __Give me a URL or Search Query. Look__ `!help`")
         if ("youtube.com" in INPUT_SOURCE) or ("youtu.be" in INPUT_SOURCE):
             FINAL_URL = INPUT_SOURCE
         else:
             FINAL_URL = yt_video_search(INPUT_SOURCE)
             if FINAL_URL == 404:
-                return await message.reply("No videos found")
+                return await msg.edit("__No videos found__ 🤷‍♂️")
+        await msg.edit("📥 __Downloading...__")
         LOCAL_FILE = video_link_getter(FINAL_URL, key="a")
+        if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
         group_call = group_call_factory.get_group_call()
         if group_call.is_connected: await group_call.stop()
         await group_call.join(CHAT_ID)
-        await msg.edit("__Playing...__")
+        await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
         VIDEO_CALL[CHAT_ID] = group_call
     except Exception as e:
@@ -94,26 +107,30 @@ async def play_vc(client, message):
 @vcusr.on_message(filters.regex("^!stream"))
 async def stream_vc(client, message):
     CHAT_ID = message.chat.id
-    msg = await message.reply("__Please wait.__")
+    if not str(CHAT_ID).startswith("-100"): return
+    msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     if media:
+        await msg.edit("📥 __Downloading...__")
         LOCAL_FILE = await client.download_media(media)
     else:
         try: INPUT_SOURCE = message.text.split(" ", 1)[1]
-        except IndexError: return await message.reply("Give me a URL or Search Query. Look `!help`")
+        except IndexError: return await msg.edit("🔎 __Give me a URL or Search Query. Look__ `!help`")
         if ("youtube.com" in INPUT_SOURCE) or ("youtu.be" in INPUT_SOURCE):
             FINAL_URL = INPUT_SOURCE
         else:
             FINAL_URL = yt_video_search(INPUT_SOURCE)
             if FINAL_URL == 404:
-                return await message.reply("No videos found")
+                return await msg.edit("__No videos found__ 🤷‍♂️")
+        await msg.edit("📥 __Downloading...__")
         LOCAL_FILE = video_link_getter(FINAL_URL, key="v")
+        if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
         group_call = group_call_factory.get_group_call()
         if group_call.is_connected: await group_call.stop()
         await group_call.join(CHAT_ID)
-        await msg.edit("__Playing...__")
+        await msg.edit("🚩 __Playing...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
         VIDEO_CALL[CHAT_ID] = group_call
     except Exception as e:

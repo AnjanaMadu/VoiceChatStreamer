@@ -2,5 +2,5 @@ tgcrypto
 pytube
 youtube-search-python
 asyncio
-pytgcalls==3.0.0.dev14
+pytgcalls==3.0.0.dev15
 git+https://github.com/pyrogram/pyrogram@master
