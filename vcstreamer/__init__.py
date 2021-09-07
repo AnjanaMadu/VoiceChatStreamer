@@ -21,7 +21,7 @@ from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
 from youtube_dl import YoutubeDL
- 
+from youtubesearchpython import VideosSearch
 
 class config():
   API_ID = int(os.environ.get("API_ID"))
@@ -52,8 +52,19 @@ class vctools():
   ydl_opts = {"geo-bypass": True, "nocheckcertificate": True}
   ydl = YoutubeDL(ydl_opts)
 
-def video_link_getter(url: str):
-    yt = YouTube(url)
-    x = yt.streams.filter(file_extension="mp4", res="720p")[0].download("downloads")
-    return x
+def video_link_getter(url: str, key=None):
+  yt = YouTube(url)
+  if key == "v":
+    x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
+  elif key == "a":
+    x = yt.streams.filter(mime_type="audio/webm", type="audio")[-1].download()
+  return x
   
+def yt_video_search(q: str):
+  try:
+    videosSearch = VideosSearch(q, limit=1)
+    videoSearchId = videosSearch.result()['result'][0]['id']
+    finalurl = f"https://www.youtube.com/watch?v={videoSearchId}"
+    return finalurl
+  except:
+    return "Not Found"
