@@ -45,7 +45,8 @@ def video_link_getter(url: str, key=None):
         elif key == "a":
             x = yt.streams.filter(type="audio")[-1].download()
         return x
-    except:
+    except Exception as e:
+        print(str(e))
         return 500
   
 def yt_video_search(q: str):
