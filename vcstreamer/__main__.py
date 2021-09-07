@@ -17,16 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
 from pyrogram import Client, idle
-from vcstreamer import API_ID, API_HASH, TOKEN, SESSION
-
-bot = Client(
-    "bot",
-    API_ID,
-    API_HASH,
-    bot_token=TOKEN,
-    plugins=dict(root="vcstreamer"),
-)
-app = Client(SESSION, API_ID, API_HASH)
+from vcstreamer.vc_clients import bot, app
 
 bot.start()
 app.start()
