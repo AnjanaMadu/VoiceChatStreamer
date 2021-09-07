@@ -19,7 +19,7 @@ import os
 from pyrogram import Client, filters
 from vcstreamer import video_link_getter, yt_video_search
 from vcstreamer import vctools
-from vcstreamer import bot, app
+from vcstreamer import app
 
 
 @Client.on_message(filters.regex("^!play"))

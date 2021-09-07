@@ -17,7 +17,6 @@ import asyncio
 import pyrogram
 import os
 from vcstreamer import vctools
-from vcstreamer import bot
 from pyrogram import Client, filters
 
 
