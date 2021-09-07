@@ -18,8 +18,8 @@ import pyrogram
 import os
 from pyrogram import Client, filters
 from vcstreamerbot import video_link_getter, yt_video_search
-from vcstreamerbot.vctools import STREAM, VIDEO_CALL, group_call_factory
-from vcstreamerbot.vc_clients import bot, app
+from vcstreamerbot import vctools
+from vcstreamerbot import bot, app
 
 
 @bot.on_message(filters.regex("^!stream"))
@@ -41,12 +41,12 @@ async def stream_vc(client, message):
         LOCAL_FILE = video_link_getter(FINAL_URL, key="v")
          
     try:
-        group_call = group_call_factory.get_group_call()
+        group_call = vctools.group_call_factory.get_group_call()
         if group_call.is_connected: await group_call.stop()
         await group_call.join(CHAT_ID)
         await msg.edit("__Playing...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
-        VIDEO_CALL[CHAT_ID] = group_call
+        vctools.VIDEO_CALL[CHAT_ID] = group_call
     except Exception as e:
         await message.reply(str(e))
-        return await VIDEO_CALL[CHAT_ID].stop()
+        return await vctools.VIDEO_CALL[CHAT_ID].stop()
