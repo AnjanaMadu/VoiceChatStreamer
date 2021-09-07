@@ -22,7 +22,7 @@ from vcstreamer import vctools
 from vcstreamer import bot, app
 
 
-@bot.on_message(filters.regex("^!play"))
+@Client.on_message(filters.regex("^!play"))
 async def play_vc(client, message):
     CHAT_ID = message.chat.id
     msg = await message.reply("__Please wait.__")

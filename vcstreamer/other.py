@@ -18,10 +18,10 @@ import pyrogram
 import os
 from vcstreamer import vctools
 from vcstreamer import bot
-from pyrogram import filters
+from pyrogram import Client, filters
 
 
-@bot.on_message(filters.regex("^!endvc$"))
+@Client.on_message(filters.regex("^!endvc$"))
 async def leave_vc(client, message):
     CHAT_ID = message.chat.id
     try:

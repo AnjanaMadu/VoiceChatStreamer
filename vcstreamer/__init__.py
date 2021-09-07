@@ -28,13 +28,6 @@ class config():
     TOKEN = os.environ.get("TOKEN")
     SESSION = os.environ.get("SESSION")
 
-bot = Client(
-  "bot",
-  config.API_ID,
-  config.API_HASH,
-  bot_token=config.TOKEN,
-  plugins=dict(root="vcstreamer")
-)
 app = Client(
   config.SESSION,
   config.API_ID,
