@@ -17,9 +17,9 @@ import asyncio
 import pyrogram
 import os
 from pyrogram import Client, filters
-from vcstreamerbot import video_link_getter, yt_video_search
-from vcstreamerbot import vctools
-from vcstreamerbot import bot, app
+from vcstreamer import video_link_getter, yt_video_search
+from vcstreamer import vctools
+from vcstreamer import bot, app
 
 
 @bot.on_message(filters.regex("^!stream"))
