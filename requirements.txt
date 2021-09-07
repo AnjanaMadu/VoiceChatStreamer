@@ -1,8 +1,6 @@
-TgCrypto
-pafy
+tgcrypto
+pytube
 youtube-search-python
-youtube_dl
-ffmpeg-python
 asyncio
 pytgcalls==3.0.0.dev14
 git+https://github.com/pyrogram/pyrogram@master
