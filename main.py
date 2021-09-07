@@ -49,15 +49,15 @@ async def help_vc(client, message):
   Ex: `!ytvc audio https://youtube.com/music`
   Ex: `!ytvc video https://youtube.com/music`
   Ex: `!ytvc audio faded` __(You can use it as a search also.)__
-- **!tgvc** (audio/video) __<reply to file>__
-  Ex: `!tgvc audio` __<reply to audio>__
-  Ex: `!tgvc video` __<reply to video>__
+- **!tgvc** (audio/video) __(reply to file)__
+  Ex: `!tgvc audio` __(reply to audio)__
+  Ex: `!tgvc video` __(reply to video)__
 - **!leavevc** __(It will leave from vc)__'''
     await message.reply(text)
     
 @vcusr.on_message(filters.regex("^!urlvc"))
 async def url_vc(client, message):
-    if not str(message.chat.id).startswith("-100"): return
+    if not message.chat.id == CHAT_ID: return
     if not str(message.from_user.id) in ADMINS: return
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
     except IndexError: return await message.reply("Give video URL")
@@ -75,14 +75,14 @@ async def url_vc(client, message):
     
 @vcusr.on_message(filters.regex("^!leavevc$"))
 async def end_vc(client, message):
-    if not str(message.chat.id).startswith("-100"): return
+    if not message.chat.id == CHAT_ID: return
     if not str(message.from_user.id) in ADMINS: return
     await group_call.stop()
     msg = await message.reply("__Left.__")
 
 @vcusr.on_message(filters.regex("^!ytvc (audio|video)"))
 async def yt_vc(client, message):
-    if not str(message.chat.id).startswith("-100"): return
+    if not message.chat.id == CHAT_ID: return
     if not str(message.from_user.id) in ADMINS: return
     try:
         INPUT_SOURCE = message.text.split(" ", 2)[2]
@@ -126,7 +126,7 @@ async def yt_vc(client, message):
 
 @vcusr.on_message(filters.regex("^!tgvc (audio|video)$"))
 async def tg_vc(client, message):
-    if not str(message.chat.id).startswith("-100"): return
+    if not message.chat.id == CHAT_ID: return
     if not str(message.from_user.id) in ADMINS: return
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
     except IndexError: return await message.reply("Give file type.")
