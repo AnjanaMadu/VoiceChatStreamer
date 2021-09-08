@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os, sys, asyncio, io, traceback
+import os, asyncio
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
@@ -34,8 +34,7 @@ vcusr = Client(
 )
 
 STREAM = {8}
-VIDEO_CALL = {}
-group_call_factory = GroupCallFactory(vcusr, GroupCallFactory.MTPROTO_CLIENT_TYPE.PYROGRAM)
+GROUP_CALLS = {}
 
 def video_link_getter(url: str, key=None):
     try:
@@ -67,10 +66,10 @@ async def help_vc(client, message):
 async def leave_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
-    try:
+    group_call = GROUP_CALLS.get(CHAT_ID)
+    if group_call:
+        await group_call.stop()
         await message.delete()
-        await VIDEO_CALL[CHAT_ID].stop()
-    except Exception: print(str(Exception))
 
 @vcusr.on_message(filters.regex("^!play"))
 async def play_vc(client, message):
@@ -95,15 +94,17 @@ async def play_vc(client, message):
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        group_call = group_call_factory.get_group_call()
-        VIDEO_CALL[CHAT_ID] = group_call
-        if VIDEO_CALL[CHAT_ID].is_connected: await VIDEO_CALL[CHAT_ID].stop()
+        group_call = GROUP_CALLS.get(CHAT_ID)
+        if group_call is None:
+            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
+            GROUP_CALLS[CHAT_ID] = group_call
+        if group_call.is_connected: await group_call.stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
     except Exception as e:
         await message.reply(str(e))
-        return await VIDEO_CALL[CHAT_ID].stop()
+        return await group_call.stop()
 
 @vcusr.on_message(filters.regex("^!stream"))
 async def stream_vc(client, message):
@@ -128,14 +129,16 @@ async def stream_vc(client, message):
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        group_call = group_call_factory.get_group_call()
-        VIDEO_CALL[CHAT_ID] = group_call
-        if VIDEO_CALL[CHAT_ID].is_connected: await VIDEO_CALL[CHAT_ID].stop()
+        group_call = GROUP_CALLS.get(CHAT_ID)
+        if group_call is None:
+            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
+            GROUP_CALLS[CHAT_ID] = group_call
+        if group_call.is_connected: await group_call.stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
     except Exception as e:
         await message.reply(str(e))
-        return await VIDEO_CALL[CHAT_ID].stop()
+        return await group_call.stop()
     
 vcusr.run()
