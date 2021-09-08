@@ -22,7 +22,7 @@ _🎯 Follow me and star this repo for more telegram bots._
 
 - Deploy to **Railway**
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FAnjanaMadu%2FVoiceChatStreamer&envs=API_ID%2CAPI_HASH%2CSESSION%2CADMINS%2CCHAT_ID&API_IDDesc=Your+API+ID+from+https%3A%2F%2Fmy.telegram.org&API_HASHDesc=Your+API+HASH+from+https%3A%2F%2Fmy.teleram.org&SESSIONDesc=Get+Pyrogram+string+session+from+https%3A%2F%2Freplit.com%2F%40AnjanaMadu%2FGenerateStringSession&ADMINSDesc=Add+your+telegram+ID.+%28Then+others+can%27t+use+your+bot.+Seperate+by+spaces%29&CHAT_IDDesc=Add+chat+id+where+bot+should+work.&referralCode=n3n8cH)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FAnjanaMadu%2FVoiceChatStreamer&envs=API_ID%2CAPI_HASH%2CSESSION&API_IDDesc=Your+API+ID+from+https%3A%2F%2Fmy.telegram.org&API_HASHDesc=Your+API+HASH+from+https%3A%2F%2Fmy.teleram.org&SESSIONDesc=Get+Pyrogram+string+session+from+https%3A%2F%2Freplit.com%2F%40AnjanaMadu%2FGenerateStringSession&referralCode=n3n8cH)
 
 ### 🏷 Deployment Guide
 
@@ -43,8 +43,25 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
   <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be there.
 </details>
 
-- What is `ADMINS`? Just fill your telegram ID.
-- What is `CHAT_ID`? Your group ID where should userbot work!
+### 🏷 Self Host
+
+**For Linux (Ubuntu)**
+
+- Updating package list and Install wget, git
+  - `sudo apt-get update && sudo apt-get install wget git -y`
+- Installing Docker
+  - `wget https://get.docker.com -O get-docker.sh`
+  - `sudo bash get-docker.sh`
+  - `rm get-docker.sh`
+- Cloning Repo and Go to dir
+  - `git clone https://github.com/AnjanaMadu/VoiceChatStreamer`
+  - `cd VoiceChatStreamer`
+- _Now create ".env" file and add you values. An example [here](https://gist.github.com/AnjanaMadu/656b5d5269d2f3f931cce5fc5dafbbc5)_
+- Docker Build
+  - `docker build . -t VoiceChatStreamer`
+- Start Bot
+  - `docker run VoiceChatStreamer`
+
 
 ## 📌 Credits
 - [MarshalX](https://github.com/MarshalX/tgcalls) for Pytgcalls
