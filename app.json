@@ -19,20 +19,6 @@
       "SESSION": {
         "description": "Get Pyrogram string session from https://replit.com/@AnjanaMadu/GenerateStringSession",
         "required": true
-      },
-      "ADMINS": {
-        "description": "Add your telegram ID. (Then others can't use your bot. Seperate by spaces)",
-        "required": true
-      },
-      "CHAT_ID": {
-        "description": "ID of your Channel or Group where the bot will works or stream videos",
-        "required": true
-      }
-    },
-    "formation": {
-      "worker": {
-        "quantity": 1,
-        "size": "free"
       }
     }
   }
