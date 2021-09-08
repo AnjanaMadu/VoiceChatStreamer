@@ -70,7 +70,7 @@ async def leave_vc(client, message):
     try:
         await message.delete()
         await VIDEO_CALL[CHAT_ID].stop()
-    except: pass
+    except Exception: print(str(Exception))
 
 @vcusr.on_message(filters.regex("^!play"))
 async def play_vc(client, message):
@@ -96,11 +96,11 @@ async def play_vc(client, message):
          
     try:
         group_call = group_call_factory.get_group_call()
-        #if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
+        VIDEO_CALL[CHAT_ID] = group_call
+        if VIDEO_CALL[CHAT_ID].is_connected: await VIDEO_CALL[CHAT_ID].stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
-        VIDEO_CALL[CHAT_ID] = group_call
     except Exception as e:
         await message.reply(str(e))
         return await VIDEO_CALL[CHAT_ID].stop()
@@ -129,11 +129,11 @@ async def stream_vc(client, message):
          
     try:
         group_call = group_call_factory.get_group_call()
-        #if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
+        VIDEO_CALL[CHAT_ID] = group_call
+        if VIDEO_CALL[CHAT_ID].is_connected: await VIDEO_CALL[CHAT_ID].stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
-        VIDEO_CALL[CHAT_ID] = group_call
     except Exception as e:
         await message.reply(str(e))
         return await VIDEO_CALL[CHAT_ID].stop()
