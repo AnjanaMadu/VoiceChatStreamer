@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os, sys, asyncio, io, traceback,
+import os, sys, asyncio, io, traceback
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
