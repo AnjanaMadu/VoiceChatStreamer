@@ -58,9 +58,9 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
   - `cd VoiceChatStreamer`
 - _Now create ".env" file and add you values. An example [here](https://gist.github.com/AnjanaMadu/656b5d5269d2f3f931cce5fc5dafbbc5)_
 - Docker Build
-  - `docker build . -t VoiceChatStreamer`
+  - `sudo docker build . -t VoiceChatStreamer`
 - Start Bot
-  - `docker run VoiceChatStreamer`
+  - `sudo docker run VoiceChatStreamer`
 
 
 ## 📌 Credits
