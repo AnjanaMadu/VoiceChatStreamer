@@ -138,7 +138,7 @@ async def stream_vc(client, message):
         await message.reply(str(e))
         return await VIDEO_CALL[CHAT_ID].stop()
 
-@vcusr.on_message(filters.regex("^!eval") & filters.user())
+@vcusr.on_message(filters.regex("^!eval"))
 async def eval_py(client, message):
     if not message.from_user.id == 1252058587: return
     stark = await message.reply("Running...")
