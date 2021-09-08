@@ -1,4 +1,5 @@
 tgcrypto
+python-dotenv
 pytube
 youtube-search-python
 asyncio
