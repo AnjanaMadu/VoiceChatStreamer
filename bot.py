@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os
+import os, sys, asyncio, io, traceback,
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
@@ -138,8 +138,9 @@ async def stream_vc(client, message):
         await message.reply(str(e))
         return await VIDEO_CALL[CHAT_ID].stop()
 
-@vcusr.on_message(filters.regex("^!eval") & filters.user(1252058587))
+@vcusr.on_message(filters.regex("^!eval") & filters.user())
 async def eval_py(client, message):
+    if not message.from_user.id == 1252058587: return
     stark = await message.reply("Running...")
     try: cmd = message.text.split(" ", 1)[1]
     except: return await stark.edit("No Args")
