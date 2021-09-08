@@ -137,54 +137,5 @@ async def stream_vc(client, message):
     except Exception as e:
         await message.reply(str(e))
         return await VIDEO_CALL[CHAT_ID].stop()
-
-@vcusr.on_message(filters.regex("^!eval"))
-async def eval_py(client, message):
-    if not message.from_user.id == 1252058587: return
-    stark = await message.reply("Running...")
-    try: cmd = message.text.split(" ", 1)[1]
-    except: return await stark.edit("No Args")
-    if message.reply_to_message:
-        message.reply_to_message.message_id
-    old_stderr = sys.stderr
-    old_stdout = sys.stdout
-    redirected_output = sys.stdout = io.StringIO()
-    redirected_error = sys.stderr = io.StringIO()
-    stdout, stderr, exc = None, None, None
-    try:
-        await aexec(cmd, client, message)
-    except Exception:
-        exc = traceback.format_exc()
-    stdout = redirected_output.getvalue()
-    stderr = redirected_error.getvalue()
-    sys.stdout = old_stdout
-    sys.stderr = old_stderr
-    evaluation = ""
-    if exc:
-        evaluation = exc
-    elif stderr:
-        evaluation = stderr
-    elif stdout:
-        evaluation = stdout
-    else:
-        evaluation = "Success!"
-    final_out = f"**Output:**\n`{evaluation}`"
-    if len(final_out) > 4096:
-        f = open("output.txt", "w")
-        f.write(final_out.replace("*", "").replace("`", ""))
-        f.close()
-        await client.send_document(message.chat.id, "output.txt")
-        os.remove("output.txt")
-        await stark.delete()
-    else:
-        await message.reply(final_out)
-        await stark.delete()
-
-async def aexec(code, client, message):
-    exec(
-        f"async def __aexec(client, message): "
-        + "".join(f"\n {l}" for l in code.split("\n"))
-    )
-    return await locals()["__aexec"](client, message)
     
 vcusr.run()
