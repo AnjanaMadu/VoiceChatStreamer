@@ -17,10 +17,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
 import os, asyncio
+from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
 from youtubesearchpython import VideosSearch
+
+load_dotenv()
 
 class config():
     API_ID = int(os.environ.get("API_ID"))
