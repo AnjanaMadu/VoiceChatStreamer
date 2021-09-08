@@ -47,7 +47,6 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
 - What is `CHAT_ID`? Your group ID where should userbot work!
 
 ## 📌 Credits
-- [Youtube-DL](https://youtube-dl.org) for Youtube-DL python
 - [MarshalX](https://github.com/MarshalX/tgcalls) for pytgcalls
 - [Me](https://github.com/AnjanaMadu) for this Project 🤪
 
