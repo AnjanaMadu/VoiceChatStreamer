@@ -96,7 +96,7 @@ async def play_vc(client, message):
          
     try:
         group_call = group_call_factory.get_group_call()
-        if group_call.is_connected: await group_call.stop()
+        if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
@@ -129,7 +129,7 @@ async def stream_vc(client, message):
          
     try:
         group_call = group_call_factory.get_group_call()
-        if group_call.is_connected: await group_call.stop()
+        if group_call.is_connected: await VIDEO_CALL[CHAT_ID].stop()
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
