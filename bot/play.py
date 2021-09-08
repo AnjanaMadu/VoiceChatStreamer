@@ -17,24 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
 import os, asyncio
-from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
+from bot import vcusr
 from youtubesearchpython import VideosSearch
-
-load_dotenv()
-
-class config():
-    API_ID = int(os.environ.get("API_ID"))
-    API_HASH = os.environ.get("API_HASH")
-    SESSION = os.environ.get("SESSION")
-
-vcusr = Client(
-    config.SESSION,
-    config.API_ID,
-    config.API_HASH
-)
 
 STREAM = {8}
 GROUP_CALLS = {}
@@ -143,5 +130,3 @@ async def stream_vc(client, message):
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
-    
-vcusr.run()
