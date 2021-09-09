@@ -14,7 +14,7 @@ vcusr = Client(
     SESSION,
     API_ID,
     API_HASH,
-    plugins=dict(root="bot")
+    plugins=dict(root="bot/plugins")
 )
 
 def video_link_getter(url: str, key=None):
