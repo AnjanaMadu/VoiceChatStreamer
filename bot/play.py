@@ -16,61 +16,33 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os, asyncio, re, pafy
+import os
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
-from pytube import YouTube
+from bot import video_link_getter, yt_video_search, match_url
 from bot import vcusr
-from youtubesearchpython import VideosSearch
 
 STREAM = {8}
 GROUP_CALLS = {}
-
-def video_link_getter(url: str, key=None):
-    try:
-        yt = YouTube(url)
-        if key == "v":
-            x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
-        elif key == "a":
-            x = yt.streams.filter(type="audio")[-1].download()
-        return x
-    except Exception as e:
-        print(str(e))
-        return 500
     
-async def run_cmd(cmd):
-    process = await asyncio.create_subprocess_shell(
-            cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
-    stdout, stderr = await process.communicate()
-    out = stdout.decode().strip()
-    return out
-    
-def yt_video_search(q: str):
-    try:
-        videosSearch = VideosSearch(q, limit=1)
-        videoSearchId = videosSearch.result()['result'][0]['id']
-        finalurl = f"https://www.youtube.com/watch?v={videoSearchId}"
-        return finalurl
-    except:
-        return 404
-
-def match_url(url, key=None):
-    if key == "yt":
-        pattern = r"(youtube.com|youtu.be)"
-    else:
-        pattern = r"((http|https)\:\/\/)"
-    result = re.search(pattern, url)
-    return result
-    
-@vcusr.on_message(filters.regex("^!help$"))
+@vcusr.on_message(filters.command("help", "!"))
 async def help_vc(client, message):
-    text = "===== Help Menu =====\n**Play as Audio**\n!play __(reply to audio / youtube url / search query)__\n!radio __(radio stream url)__\n\n**Play as Video**\n!stream __(reply to video / youtube url / search query)__\n!live __(youtube live stream url)__"
+    text = '''====== Help Menu ======
+**Play as Audio**
+- !play __(reply to audio / youtube url / search query)__
+- !radio __(radio stream url)__
+
+**Play as Video**
+- !stream __(reply to video / youtube url / search query)__
+- !live __(youtube live stream url)__
+
+**Extra**
+- !endvc: Leave from vc
+- !video: Download url or search query in video format
+- !audio: Download url or search query in audio format'''
     await message.reply(text)
 
-@vcusr.on_message(filters.regex("^!endvc$"))
+@vcusr.on_message(filters.command("endvc", "!"))
 async def leave_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -79,7 +51,7 @@ async def leave_vc(client, message):
         await group_call.stop()
         await message.reply("__Left.__")
 
-@vcusr.on_message(filters.regex("^!live"))
+@vcusr.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -109,7 +81,7 @@ async def live_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
 
-@vcusr.on_message(filters.regex("^!radio"))
+@vcusr.on_message(filters.command("radio", "!"))
 async def radio_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -134,7 +106,7 @@ async def radio_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
     
-@vcusr.on_message(filters.regex("^!play"))
+@vcusr.on_message(filters.command("play", "!"))
 async def play_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -171,7 +143,7 @@ async def play_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
 
-@vcusr.on_message(filters.regex("^!stream"))
+@vcusr.on_message(filters.command("stream", "!"))
 async def stream_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
