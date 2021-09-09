@@ -37,7 +37,17 @@ def video_link_getter(url: str, key=None):
     except Exception as e:
         print(str(e))
         return 500
-  
+    
+async def run_cmd(cmd):
+    process = await asyncio.create_subprocess_shell(
+            cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+    stdout, stderr = await process.communicate()
+    out = stdout.decode().strip()
+    return out
+    
 def yt_video_search(q: str):
     try:
         videosSearch = VideosSearch(q, limit=1)
@@ -59,8 +69,61 @@ async def leave_vc(client, message):
     group_call = GROUP_CALLS.get(CHAT_ID)
     if group_call:
         await group_call.stop()
-        await message.delete()
+        await message.reply("__Left.__")
 
+@vcusr.on_message(filters.regex("^!live"))
+async def live_vc(client, message):
+    CHAT_ID = message.chat.id
+    if not str(CHAT_ID).startswith("-100"): return
+    msg = await message.reply("⏳ __Please wait.__")
+    media = message.reply_to_message
+    try: INPUT_SOURCE = message.text.split(" ", 1)[1]
+    except IndexError: return await msg.edit("🔎 __Give me a URL__")
+    if "youtube.com" not in INPUT_SOURCE or "youtu.be" not in INPUT_SOURCE:
+        return await msg.edit("🔎 __Give me a valid URL__")
+    ytlink = await run_cmd(f"youtube-dl -g {INPUT_SOURCE}")
+    if "https://" not in ytlink or "http://" not in ytlink:
+        return await msg.edit(f"`{ytlink}`")
+    try:
+        group_call = GROUP_CALLS.get(CHAT_ID)
+        if group_call is None:
+            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
+            GROUP_CALLS[CHAT_ID] = group_call
+        if group_call.is_connected:
+            await group_call.stop()
+            await asyncio.sleep(3)
+        await group_call.join(CHAT_ID)
+        await msg.edit("🚩 __Live Streaming...__")
+        await group_call.start_video(ytlink, repeat=False)
+    except Exception as e:
+        await message.reply(str(e))
+        return await group_call.stop()
+
+@vcusr.on_message(filters.regex("^!radio"))
+async def radio_vc(client, message):
+    CHAT_ID = message.chat.id
+    if not str(CHAT_ID).startswith("-100"): return
+    msg = await message.reply("⏳ __Please wait.__")
+    media = message.reply_to_message
+    try: INPUT_SOURCE = message.text.split(" ", 1)[1]
+    except IndexError: return await msg.edit("🔎 __Give me a URL__")
+    if "https://" not in INPUT_SOURCE or "http://" not in INPUT_SOURCE:
+        return await msg.edit("🔎 __Give me a valid URL__")
+    try:
+        group_call = GROUP_CALLS.get(CHAT_ID)
+        if group_call is None:
+            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
+            GROUP_CALLS[CHAT_ID] = group_call
+        if group_call.is_connected:
+            await group_call.stop()
+            await asyncio.sleep(3)
+        await group_call.join(CHAT_ID)
+        await msg.edit("🚩 __Radio Playing...__")
+        await group_call.start_audio(INPUT_SOURCE, repeat=False)
+    except Exception as e:
+        await message.reply(str(e))
+        return await group_call.stop()
+    
 @vcusr.on_message(filters.regex("^!play"))
 async def play_vc(client, message):
     CHAT_ID = message.chat.id
@@ -88,7 +151,9 @@ async def play_vc(client, message):
         if group_call is None:
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
-        if group_call.is_connected: await group_call.stop()
+        if group_call.is_connected:
+            await group_call.stop()
+            await asyncio.sleep(3)
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
@@ -123,9 +188,11 @@ async def stream_vc(client, message):
         if group_call is None:
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
-        if group_call.is_connected: await group_call.stop()
+        if group_call.is_connected:
+            await group_call.stop()
+            await asyncio.sleep(3)
         await group_call.join(CHAT_ID)
-        await msg.edit("🚩 __Playing...__")
+        await msg.edit("🚩 Streaming...__")
         await group_call.start_video(LOCAL_FILE, repeat=False)
     except Exception as e:
         await message.reply(str(e))
