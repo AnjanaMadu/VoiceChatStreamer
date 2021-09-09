@@ -36,7 +36,8 @@ async def audio_dl(client, message):
         'keepvideo':True,
         'prefer_ffmpeg':False,
         'geo_bypass':True,
-        'outtmpl':'%(title)s.%(ext)s'
+        'outtmpl':'%(title)s.%(ext)s',
+        'quite':True
     }
     try:
         await msg.edit("📥 __Downloading...__")
@@ -45,7 +46,7 @@ async def audio_dl(client, message):
             fname = ytdl.prepare_filename(ytdl_data)
     except Exception as e:
         return await msg.edit(f"`{e}`")
-    await msg.edit("📤 __Uploading...___")
+    await msg.edit("📤 __Uploading...__")
     await message.reply_audio(
         fname,
         caption=ytdl_data['title'],
@@ -70,7 +71,8 @@ async def video_dl(client, message):
         'keepvideo':True,
         'prefer_ffmpeg':False,
         'geo_bypass':True,
-        'outtmpl':'%(title)s.%(ext)s'
+        'outtmpl':'%(title)s.%(ext)s',
+        'quite':True
     }
     try:
         await msg.edit("📥 __Downloading...__")
@@ -79,7 +81,7 @@ async def video_dl(client, message):
             fname = ytdl.prepare_filename(ytdl_data)
     except Exception as e:
         return await msg.edit(f"`{e}`")
-    await msg.edit("📤 __Uploading...___")
+    await msg.edit("📤 __Uploading...__")
     await message.reply_video(
         fname,
         caption=ytdl_data['title'])
