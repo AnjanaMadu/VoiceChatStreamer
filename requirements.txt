@@ -1,6 +1,7 @@
 tgcrypto
 python-dotenv
 youtube_dl
+pafy
 pytube
 youtube-search-python
 asyncio
