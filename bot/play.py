@@ -87,7 +87,7 @@ async def live_vc(client, message):
     media = message.reply_to_message
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
     except IndexError: return await msg.edit("🔎 __Give me a URL__")
-    if "youtube.com" not in INPUT_SOURCE or "youtu.be" not in INPUT_SOURCE:
+    if match_url(INPUT_SOURCE, key="yt") is None::
         return await msg.edit("🔎 __Give me a valid URL__")
     ytlink = await run_cmd(f"youtube-dl -g {INPUT_SOURCE}")
     if match_url(ytlink) is None:
