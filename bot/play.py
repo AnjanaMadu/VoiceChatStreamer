@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os, asyncio
+import os, asyncio, re
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
@@ -57,9 +57,17 @@ def yt_video_search(q: str):
     except:
         return 404
 
+def match_url(url, key=None):
+    if key == "yt":
+        pattern = r"(youtube.com|youtu.be)"
+    else:
+        pattern = r"((http|https)\:\/\/)"
+    result = re.search(pattern, url)
+    return result
+    
 @vcusr.on_message(filters.regex("^!help$"))
 async def help_vc(client, message):
-    text = "===== Help Menu =====\n**Play as Audio**\n!play __(reply to audio / youtube url / search query)__\n\n**Play as Video**\n!stream __(reply to video / youtube url / search query)__"
+    text = "===== Help Menu =====\n**Play as Audio**\n!play __(reply to audio / youtube url / search query)__\n!radio __(radio stream url)__\n\n**Play as Video**\n!stream __(reply to video / youtube url / search query)__\n!live __(youtube live stream url)__"
     await message.reply(text)
 
 @vcusr.on_message(filters.regex("^!endvc$"))
@@ -82,7 +90,7 @@ async def live_vc(client, message):
     if "youtube.com" not in INPUT_SOURCE or "youtu.be" not in INPUT_SOURCE:
         return await msg.edit("🔎 __Give me a valid URL__")
     ytlink = await run_cmd(f"youtube-dl -g {INPUT_SOURCE}")
-    if "https://" not in ytlink or "http://" not in ytlink:
+    if match_url(ytlink) is None:
         return await msg.edit(f"`{ytlink}`")
     try:
         group_call = GROUP_CALLS.get(CHAT_ID)
@@ -107,7 +115,7 @@ async def radio_vc(client, message):
     media = message.reply_to_message
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
     except IndexError: return await msg.edit("🔎 __Give me a URL__")
-    if "https://" not in INPUT_SOURCE or "http://" not in INPUT_SOURCE:
+    if match_url(INPUT_SOURCE) is None:
         return await msg.edit("🔎 __Give me a valid URL__")
     try:
         group_call = GROUP_CALLS.get(CHAT_ID)
