@@ -13,7 +13,8 @@ SESSION = os.environ.get("SESSION")
 vcusr = Client(
     SESSION,
     API_ID,
-    API_HASH
+    API_HASH,
+    plugins=dict(root="bot")
 )
 
 def video_link_getter(url: str, key=None):
