@@ -1,6 +1,4 @@
 from bot import vcusr
-from bot.play import *
-from bot.download import *
 import logging
 
 logging.basicConfig(level=logging.WARNING,
