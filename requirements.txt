@@ -7,4 +7,3 @@ youtube-search-python
 asyncio
 pytgcalls==3.0.0.dev16
 git+https://github.com/pyrogram/pyrogram@master
-git+https://github.com/yt-dlp/yt-dlp.git@release
