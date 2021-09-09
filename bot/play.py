@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os, asyncio, re
+import os, asyncio, re, pafy
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from pytube import YouTube
@@ -89,7 +89,9 @@ async def live_vc(client, message):
     except IndexError: return await msg.edit("🔎 __Give me a URL__")
     if match_url(INPUT_SOURCE, key="yt") is None:
         return await msg.edit("🔎 __Give me a valid URL__")
-    ytlink = await run_cmd(f"youtube-dl -g {INPUT_SOURCE}")
+    #ytlink = await run_cmd(f"youtube-dl -g {INPUT_SOURCE}")
+    videof = pafy.new(INPUT_SOURCE)
+    ytlink = videof.getbest().url
     if match_url(ytlink) is None:
         return await msg.edit(f"`{ytlink}`")
     try:
