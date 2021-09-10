@@ -22,7 +22,6 @@ jobs:
          continue-on-error: true
          run: |
            sudo apt-get update
-           echo "API_ID=${{secrets.API_ID}}\nAPI_HASH=${{secrets.API_HASH}}\nSESSION=${{secrets.SESSION}}" >> .env
            docker build . -t vcbot
        - name: Running
          timeout-minutes: 350
