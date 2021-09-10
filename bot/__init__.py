@@ -6,9 +6,16 @@ from pytube import YouTube
 
 load_dotenv()
 
-API_ID = int(os.environ.get("API_ID"))
-API_HASH = os.environ.get("API_HASH")
-SESSION = os.environ.get("SESSION")
+if os.path.isfile("config.py"):
+    from config import CONFIG, API_ID, API_HASH, SESSION
+    if CONFIG:
+        API_ID = API_ID
+        API_HASH = API_HASH
+        SESSION = SESSION
+else:
+    API_ID = int(os.environ.get("API_ID"))
+    API_HASH = os.environ.get("API_HASH")
+    SESSION = os.environ.get("SESSION")
 
 vcusr = Client(
     SESSION,
