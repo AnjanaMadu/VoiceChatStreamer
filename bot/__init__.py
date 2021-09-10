@@ -7,6 +7,7 @@ def load_env():
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
     SESSION = os.environ.get("SESSION")
+    return API_ID, API_HASH, SESSION
     
 os.system("echo 'Checking for config'")
 
@@ -19,10 +20,10 @@ if os.path.isfile("config.py"):
         SESSION = SESSION
     else:
         os.system("echo 'No config found. Getting variables'")
-        load_env()
+        API_ID, API_HASH, SESSION = load_env()
 else:
     os.system("echo 'No config found. Getting variables'")
-    load_env()
+    API_ID, API_HASH, SESSION = load_env()
 
 
 vcusr = Client(
