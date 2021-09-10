@@ -1,10 +1,12 @@
 import os, asyncio, re, pafy
-from dotenv import load_dotenv
 from pyrogram import Client
 from youtubesearchpython import VideosSearch
 from pytube import YouTube
 
-load_dotenv()
+def load_env():
+    API_ID = int(os.environ.get("API_ID"))
+    API_HASH = os.environ.get("API_HASH")
+    SESSION = os.environ.get("SESSION")
 
 if os.path.isfile("config.py"):
     from config import CONFIG, API_ID, API_HASH, SESSION
@@ -12,10 +14,10 @@ if os.path.isfile("config.py"):
         API_ID = API_ID
         API_HASH = API_HASH
         SESSION = SESSION
+    else: load_env()
 else:
-    API_ID = int(os.environ.get("API_ID"))
-    API_HASH = os.environ.get("API_HASH")
-    SESSION = os.environ.get("SESSION")
+    load_env()
+
 
 vcusr = Client(
     SESSION,
