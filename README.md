@@ -61,14 +61,13 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
   - `sudo bash get-docker.sh`
   - `rm get-docker.sh`
 - Cloning Repo and Go to dir
-  - `git clone https://github.com/AnjanaMadu/VoiceChatStreamer`
-  - `mv VoiceChatStreamer voicechatstreamer`
-  - `cd voicechatstreamer`
-- _Now create ".env" file and add you values. An example [here](https://gist.github.com/AnjanaMadu/656b5d5269d2f3f931cce5fc5dafbbc5)_
+  - `git clone https://github.com/AnjanaMadu/VoiceChatStreamer bot`
+  - `cd bot`
+- _Now edit "config.py" with your values._
 - Docker Build
-  - `sudo docker build . -t voicechatstreamer`
+  - `sudo docker build . -t vcstreamer`
 - Start Bot
-  - `sudo docker run voicechatstreamer`
+  - `sudo docker run vcstreamer`
 
 
 ## 📌 Credits
