@@ -76,7 +76,7 @@ async def live_vc(client, message):
             await asyncio.sleep(3)
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Live Streaming...__")
-        await group_call.start_video(ytlink, repeat=False)
+        await group_call.start_video(ytlink, repeat=False, enable_experimental_lip_sync=True)
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
@@ -175,7 +175,7 @@ async def stream_vc(client, message):
             await asyncio.sleep(3)
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 Streaming...__")
-        await group_call.start_video(LOCAL_FILE, repeat=False)
+        await group_call.start_video(LOCAL_FILE, repeat=False, enable_experimental_lip_sync=True)
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
