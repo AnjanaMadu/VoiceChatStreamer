@@ -7,15 +7,21 @@ def load_env():
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
     SESSION = os.environ.get("SESSION")
+    
+os.system("echo 'Checking for config'")
 
 if os.path.isfile("config.py"):
     from config import CONFIG, API_ID, API_HASH, SESSION
     if CONFIG:
+        os.system("echo 'Loading values from config'")
         API_ID = API_ID
         API_HASH = API_HASH
         SESSION = SESSION
-    else: load_env()
+    else:
+        os.system("echo 'No config found. Getting variables'")
+        load_env()
 else:
+    os.system("echo 'No config found. Getting variables'")
     load_env()
 
 
