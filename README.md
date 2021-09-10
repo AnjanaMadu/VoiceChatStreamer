@@ -27,7 +27,7 @@ _🎯 Follow me and star this repo for more telegram bots._
 
 ### 🏷 Radio Stations
 - Sri Lanka radio stations [**here**](https://gist.github.com/AnjanaMadu/ed2d02bd03a8cf0dd1a39eb958f361e6)
-- India radio stations comming [**here**](https://gist.github.com/AnjanaMadu/8a1042d755b65c37cf6c884eff2a1d1f)
+- India radio stations [**here**](https://gist.github.com/AnjanaMadu/8a1042d755b65c37cf6c884eff2a1d1f)
 
 _If you like to add your country radio stations, Please contact [me](https://t.me/anjana_ma)_
 
