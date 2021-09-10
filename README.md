@@ -9,7 +9,8 @@ _This bot can stream audio or video files and urls in telegram voice chats :)_
 _🎯 Follow me and star this repo for more telegram bots._
 
 ## 📌 Features
-- Play direct video streams.
+- Play youtube live streams.
+- Radio playing.
 - Play videos from youtube in audio and video formats
 - Play via youtube search
 - Telegram video/audio playing
@@ -23,6 +24,12 @@ _🎯 Follow me and star this repo for more telegram bots._
 - Deploy to **Railway**
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FAnjanaMadu%2FVoiceChatStreamer&envs=API_ID%2CAPI_HASH%2CSESSION&API_IDDesc=Your+API+ID+from+https%3A%2F%2Fmy.telegram.org&API_HASHDesc=Your+API+HASH+from+https%3A%2F%2Fmy.teleram.org&SESSIONDesc=Get+Pyrogram+string+session+from+https%3A%2F%2Freplit.com%2F%40AnjanaMadu%2FGenerateStringSession&referralCode=n3n8cH)
+
+### 🏷 Radio Stations
+- Sri Lanka radio stations [**here**](https://gist.github.com/AnjanaMadu/ed2d02bd03a8cf0dd1a39eb958f361e6)
+- India radio stations comming soon
+
+_If you like to add your country radio stations, Please contact [me](https://t.me/anjana_ma)_
 
 ### 🏷 Deployment Guide
 
