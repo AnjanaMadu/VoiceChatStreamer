@@ -88,7 +88,7 @@ async def radio_vc(client, message):
     msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
-    except IndexError: return await msg.edit("🔎 __Give me a URL__")
+    except IndexError: return await msg.edit("🔎 __All radio stations listed [**here**](https://github.com/AnjanaMadu/radio_stations). Please get link from [**here**](https://github.com/AnjanaMadu/radio_stations)__")
     if match_url(INPUT_SOURCE) is None:
         return await msg.edit("🔎 __Give me a valid URL__")
     try:
