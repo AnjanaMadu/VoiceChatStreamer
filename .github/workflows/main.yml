@@ -1,17 +1,12 @@
 name: VoiceChatStreamer
 on:
-    schedule:
-      - cron: "0 */6 * * *"
-    push:
-      branches: [ beta ]
     workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-       - uses: actions/checkout@v2
-         with:
-            ref: beta
+       - name: Cloning Repo
+         uses: actions/checkout@v2
        - uses: styfle/cancel-workflow-action@0.9.0
          name: "Cancelling duplicate workflow runs"
          with:
