@@ -28,4 +28,4 @@ jobs:
          timeout-minutes: 350
          continue-on-error: true
          run: |
-           docker run vcbot --env-file .env
+           docker run vcbot
