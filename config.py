@@ -7,7 +7,7 @@ CONFIG = False
 API_ID = 123456
 
 # Add your API HASH from my.telegram.org
-API_HASH "xxxxxxxxxxxxxxxxxxx"
+API_HASH = "xxxxxxxxxxxxxxxxxxx"
 
 # Read readme and generate string session. Then add that to here.
 SESSION = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
