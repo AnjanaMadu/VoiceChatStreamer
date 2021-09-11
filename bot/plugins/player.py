@@ -126,7 +126,6 @@ async def play_vc(client, message):
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
         await check_vc_before_play(group_call, CHAT_ID)
-        await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
     except Exception as e:
@@ -161,7 +160,6 @@ async def stream_vc(client, message):
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
         await check_vc_before_play(group_call, CHAT_ID)
-        await group_call.join(CHAT_ID)
         await msg.edit("🚩 Streaming...__")
         await group_call.start_video(LOCAL_FILE, repeat=False, enable_experimental_lip_sync=True)
     except Exception as e:
