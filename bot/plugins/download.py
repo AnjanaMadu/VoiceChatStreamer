@@ -17,12 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
 import os
-from pyrogram import filters
+from pyrogram import Client, filters
 from bot import vcusr
 from bot import yt_video_search, match_url
 import youtube_dl
 
-@vcusr.on_message(filters.command("audio", "!"))
+@Client.on_message(filters.command("audio", "!"))
 async def audio_dl(client, message):
     msg = await message.reply("⏳ __Please wait.__")
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
@@ -57,7 +57,7 @@ async def audio_dl(client, message):
         await msg.delete()
     except: pass
     
-@vcusr.on_message(filters.command("video", "!"))
+@Client.on_message(filters.command("video", "!"))
 async def video_dl(client, message):
     msg = await message.reply("⏳ __Please wait.__")
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
