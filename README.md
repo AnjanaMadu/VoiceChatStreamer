@@ -55,9 +55,7 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
 - Updating package list and Install wget, git
   - `sudo apt-get update && sudo apt-get install wget git -y`
 - Installing Docker
-  - `wget https://get.docker.com -O get-docker.sh`
-  - `sudo bash get-docker.sh`
-  - `rm get-docker.sh`
+  - `snap install docker`
 - Cloning Repo and Go to dir
   - `git clone https://github.com/AnjanaMadu/VoiceChatStreamer bot`
   - `cd bot`
