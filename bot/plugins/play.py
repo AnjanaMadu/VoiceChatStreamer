@@ -20,12 +20,9 @@ import os, asyncio, pafy
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from bot import video_link_getter, yt_video_search, match_url
-from bot import vcusr
-
-STREAM = {8}
-GROUP_CALLS = {}
+from bot import vcusr, GROUP_CALLS
     
-@vcusr.on_message(filters.command("help", "!"))
+@Client.on_message(filters.command("help", "!"))
 async def help_vc(client, message):
     text = '''====== Help Menu ======
 **Play as Audio**
@@ -42,7 +39,7 @@ async def help_vc(client, message):
 - !audio: Download url or search query in audio format'''
     await message.reply(text)
 
-@vcusr.on_message(filters.command("endvc", "!"))
+@Client.on_message(filters.command("endvc", "!"))
 async def leave_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -51,7 +48,7 @@ async def leave_vc(client, message):
         await group_call.stop()
         await message.reply("__Left.__")
 
-@vcusr.on_message(filters.command("live", "!"))
+@Client.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -81,7 +78,7 @@ async def live_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
 
-@vcusr.on_message(filters.command("radio", "!"))
+@Client.on_message(filters.command("radio", "!"))
 async def radio_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -106,7 +103,7 @@ async def radio_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
     
-@vcusr.on_message(filters.command("play", "!"))
+@Client.on_message(filters.command("play", "!"))
 async def play_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
@@ -143,7 +140,7 @@ async def play_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
 
-@vcusr.on_message(filters.command("stream", "!"))
+@Client.on_message(filters.command("stream", "!"))
 async def stream_vc(client, message):
     CHAT_ID = message.chat.id
     if not str(CHAT_ID).startswith("-100"): return
