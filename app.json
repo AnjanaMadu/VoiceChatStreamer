@@ -23,6 +23,10 @@
       "TOKEN": {
         "description": "Your BOT TOKEN from https://t.me/BotFather",
         "required": true
+      },
+      "ADMINS": {
+        "description": "Your telegram ID. If 2 or more, Seperate by space.",
+        "required": true
       }
     }
   }
