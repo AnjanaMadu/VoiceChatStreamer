@@ -7,30 +7,31 @@ def load_env():
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
     SESSION = os.environ.get("SESSION")
-    return API_ID, API_HASH, SESSION
+    TOKEN = os.environ.get("TOKEN")
+    return API_ID, API_HASH, SESSION, TOKEN
     
 os.system("echo 'Checking for config'")
 
 if os.path.isfile("config.py"):
-    from config import CONFIG, API_ID, API_HASH, SESSION
+    from config import CONFIG, API_ID, API_HASH, SESSION, TOKEN
     if CONFIG:
         os.system("echo 'Loading values from config'")
         API_ID = API_ID
         API_HASH = API_HASH
         SESSION = SESSION
+        TOKEN = TOKEN
     else:
         os.system("echo 'No config found. Getting variables'")
-        API_ID, API_HASH, SESSION = load_env()
+        API_ID, API_HASH, SESSION, TOKEN = load_env()
 else:
     os.system("echo 'No config found. Getting variables'")
-    API_ID, API_HASH, SESSION = load_env()
+    API_ID, API_HASH, SESSION, TOKEN = load_env()
 
 
 vcusr = Client(
     SESSION,
     API_ID,
-    API_HASH,
-    plugins=dict(root="bot/plugins")
+    API_HASH
 )
 
 def video_link_getter(url: str, key=None):
