@@ -70,7 +70,7 @@ async def live_vc(client, message):
         group_call = GROUP_CALLS.get(CHAT_ID)
         if group_call is None:
             group_call = GroupCallFactory(vcusr).get_group_call()
-            GROUP_CALLS[CHAT_ID] = group_call
+            GROUP_CALLS.update({CHAT_ID: group_call})
         await check_vc_before_play(group_call, CHAT_ID)
         await msg.edit("🚩 __Live Streaming...__")
         await group_call.start_video(ytlink, repeat=False, enable_experimental_lip_sync=True)
@@ -91,8 +91,8 @@ async def radio_vc(client, message):
     try:
         group_call = GROUP_CALLS.get(CHAT_ID)
         if group_call is None:
-            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
-            GROUP_CALLS[CHAT_ID] = group_call
+            group_call = GroupCallFactory(vcusr).get_group_call()
+            GROUP_CALLS.update({CHAT_ID: group_call})
         await check_vc_before_play(group_call, CHAT_ID)
         await msg.edit("🚩 __Radio Playing...__")
         await group_call.start_audio(INPUT_SOURCE, repeat=False)
@@ -125,8 +125,8 @@ async def play_vc(client, message):
     try:
         group_call = GROUP_CALLS.get(CHAT_ID)
         if group_call is None:
-            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
-            GROUP_CALLS[CHAT_ID] = group_call
+            group_call = GroupCallFactory(vcusr).get_group_call()
+            GROUP_CALLS.update({CHAT_ID: group_call})
         await check_vc_before_play(group_call, CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
@@ -159,8 +159,8 @@ async def stream_vc(client, message):
     try:
         group_call = GROUP_CALLS.get(CHAT_ID)
         if group_call is None:
-            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
-            GROUP_CALLS[CHAT_ID] = group_call
+            group_call = GroupCallFactory(vcusr).get_group_call()
+            GROUP_CALLS.update({CHAT_ID: group_call})
         await check_vc_before_play(group_call, CHAT_ID)
         await msg.edit("🚩 Streaming...__")
         await group_call.start_video(LOCAL_FILE, repeat=False, enable_experimental_lip_sync=True)
