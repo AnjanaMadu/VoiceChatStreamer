@@ -3,6 +3,9 @@ from pyrogram import Client
 from youtubesearchpython import VideosSearch
 from pytube import YouTube
 
+GROUP_CALLS = {}
+MUSIC_QUEUE = {}
+
 def load_env():
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
