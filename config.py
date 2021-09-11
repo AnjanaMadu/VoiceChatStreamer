@@ -11,3 +11,6 @@ API_HASH = "xxxxxxxxxxxxxxxxxxx"
 
 # Read readme and generate string session. Then add that to here.
 SESSION = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Add your bot token here
+TOKEN = "12345678:xxxxxxxxxxxxxxxxxxxxxxxx"
