@@ -45,6 +45,8 @@ async def help_vc(client, message):
 
 **Extra**
 - !endvc: Leave from vc
+- !pause: Pause the vc
+- !resume: Resume the vc
 - !video: Download url or search query in video format
 - !audio: Download url or search query in audio format'''
     await message.reply(text)
