@@ -31,6 +31,7 @@ async def leave_vc(client, message):
     if group_call:
         await group_call.stop()
         await message.reply("__Left.__")
+        GROUP_CALLS.pop(CHAT_ID)
     elif group_call is None:
         return await message.reply("__No VC Running.__")
         
