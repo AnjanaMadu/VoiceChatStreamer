@@ -19,6 +19,10 @@
       "SESSION": {
         "description": "Get Pyrogram string session from https://replit.com/@AnjanaMadu/GenerateStringSession",
         "required": true
+      },
+      "TOKEN": {
+        "description": "Your BOT TOKEN from https://t.me/BotFather",
+        "required": true
       }
     }
   }
