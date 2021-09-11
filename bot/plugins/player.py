@@ -21,7 +21,17 @@ from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from bot import video_link_getter, yt_video_search, match_url
 from bot import vcusr, GROUP_CALLS
-    
+
+async def check_vc_before_play(group_call, chat_id):
+    if (await group_call.is_video_running):
+        await group_call.stop_video()
+    elif (await group_call.is_audio_running):
+        await group_call.stop_audio()
+    elif (await group_call.is_running):
+        await group_call.stop_media()
+    else:
+        await group_call.join(chat_id)
+
 @Client.on_message(filters.command("help", "!"))
 async def help_vc(client, message):
     text = '''====== Help Menu ======
@@ -38,15 +48,6 @@ async def help_vc(client, message):
 - !video: Download url or search query in video format
 - !audio: Download url or search query in audio format'''
     await message.reply(text)
-
-@Client.on_message(filters.command("endvc", "!"))
-async def leave_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
-    group_call = GROUP_CALLS.get(CHAT_ID)
-    if group_call:
-        await group_call.stop()
-        await message.reply("__Left.__")
 
 @Client.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
@@ -66,12 +67,9 @@ async def live_vc(client, message):
     try:
         group_call = GROUP_CALLS.get(CHAT_ID)
         if group_call is None:
-            group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
+            group_call = GroupCallFactory(vcusr).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
-        if group_call.is_connected:
-            await group_call.stop()
-            await asyncio.sleep(3)
-        await group_call.join(CHAT_ID)
+        await check_vc_before_play(group_call, CHAT_ID)
         await msg.edit("🚩 __Live Streaming...__")
         await group_call.start_video(ytlink, repeat=False, enable_experimental_lip_sync=True)
     except Exception as e:
@@ -93,10 +91,7 @@ async def radio_vc(client, message):
         if group_call is None:
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
-        if group_call.is_connected:
-            await group_call.stop()
-            await asyncio.sleep(3)
-        await group_call.join(CHAT_ID)
+        await check_vc_before_play(group_call, CHAT_ID)
         await msg.edit("🚩 __Radio Playing...__")
         await group_call.start_audio(INPUT_SOURCE, repeat=False)
     except Exception as e:
@@ -130,9 +125,7 @@ async def play_vc(client, message):
         if group_call is None:
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
-        if group_call.is_connected:
-            await group_call.stop()
-            await asyncio.sleep(3)
+        await check_vc_before_play(group_call, CHAT_ID)
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 __Playing...__")
         await group_call.start_audio(LOCAL_FILE, repeat=False)
@@ -167,9 +160,7 @@ async def stream_vc(client, message):
         if group_call is None:
             group_call = GroupCallFactory(vcusr, outgoing_audio_bitrate_kbit=512).get_group_call()
             GROUP_CALLS[CHAT_ID] = group_call
-        if group_call.is_connected:
-            await group_call.stop()
-            await asyncio.sleep(3)
+        await check_vc_before_play(group_call, CHAT_ID)
         await group_call.join(CHAT_ID)
         await msg.edit("🚩 Streaming...__")
         await group_call.start_video(LOCAL_FILE, repeat=False, enable_experimental_lip_sync=True)
