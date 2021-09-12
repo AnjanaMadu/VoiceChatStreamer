@@ -23,7 +23,7 @@ _🎯 Follow me and star this repo for more telegram bots._
 
 - Deploy to **Railway**
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FAnjanaMadu%2FVoiceChatStreamer&envs=API_ID%2CAPI_HASH%2CSESSION&API_IDDesc=Your+API+ID+from+https%3A%2F%2Fmy.telegram.org&API_HASHDesc=Your+API+HASH+from+https%3A%2F%2Fmy.teleram.org&SESSIONDesc=Get+Pyrogram+string+session+from+https%3A%2F%2Freplit.com%2F%40AnjanaMadu%2FGenerateStringSession&referralCode=n3n8cH)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FAnjanaMadu%2FVoiceChatStreamer&envs=API_ID%2CAPI_HASH%2CSESSION%2CTOKEN%2CCHAT_ID%2CADMINS&referralCode=n3n8cH)
 
 ### 🏷 Radio Stations. [Click here](https://github.com/AnjanaMadu/radio_stations)
 
@@ -47,6 +47,9 @@ _Note: How to use? You need to add String session own's user to your group. Ok n
   <b>Step 5:</b> Now ask for mobile fill it also.<br>
   <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be there.
 </details>
+- `TOKEN`: Bot Token
+- `CHAT_ID`: Chat ID where bot should work
+- `ADMINS`: Add ur TG ID, Seperate by spaces
 
 ### 🏷 VPS Deployment Docker
 
