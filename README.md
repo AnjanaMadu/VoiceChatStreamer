@@ -79,8 +79,6 @@ _Note: How to use? You need to add String session own's user to your group. Ok n
   - `git clone https://github.com/AnjanaMadu/VoiceChatStreamer bot`
   - `cd bot`
 - _Now edit "config.py" with your values._
-  - `cd`
-  - `cd VoiceChatStreamer`
 - Install Requirements
   - `pip3 install -U pip && pip3 install -r requirements.txt`
 - Start Bot
