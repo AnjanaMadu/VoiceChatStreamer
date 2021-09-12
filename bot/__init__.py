@@ -1,35 +1,33 @@
-import os, asyncio, re, pafy
+import os, sys, asyncio, re, pafy
 from pyrogram import Client
 from youtubesearchpython import VideosSearch
 from pytube import YouTube
 
 GROUP_CALLS = {}
-MUSIC_QUEUE = {}
+QUEUE = []
 
 def load_env():
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
     SESSION = os.environ.get("SESSION")
     TOKEN = os.environ.get("TOKEN")
-    return API_ID, API_HASH, SESSION, TOKEN
+    ADMINS = os.environ.get("ADMINS")
+    ADMINS = ADMINS.split(" ")
+    CHAT_ID = os.environ.get("CHAT_ID")
+    return API_ID, API_HASH, SESSION, TOKEN, ADMINS, CHAT_ID
     
-os.system("echo 'Checking for config'")
-
 if os.path.isfile("config.py"):
-    from config import CONFIG, API_ID, API_HASH, SESSION, TOKEN
+    from config import CONFIG, API_ID, API_HASH, SESSION, TOKEN, ADMINS, CHAT_ID
     if CONFIG:
-        os.system("echo 'Loading values from config'")
         API_ID = API_ID
         API_HASH = API_HASH
         SESSION = SESSION
         TOKEN = TOKEN
+        ADMINS = ADMINS
+        ADMINS = ADMINS.split(" ")
+        CHAT_ID = CHAT_ID
     else:
-        os.system("echo 'No config found. Getting variables'")
-        API_ID, API_HASH, SESSION, TOKEN = load_env()
-else:
-    os.system("echo 'No config found. Getting variables'")
-    API_ID, API_HASH, SESSION, TOKEN = load_env()
-
+        API_ID, API_HASH, SESSION, TOKEN, ADMINS, CHAT_ID = load_env()
 
 vcusr = Client(
     SESSION,
