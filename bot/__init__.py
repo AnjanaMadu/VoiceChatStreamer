@@ -3,7 +3,6 @@ from pyrogram import Client
 from youtubesearchpython import VideosSearch
 from pytube import YouTube
 
-GROUP_CALLS = {}
 QUEUE = []
 
 def str_to_int(input):
