@@ -6,26 +6,35 @@ from pytube import YouTube
 GROUP_CALLS = {}
 QUEUE = []
 
+def str_to_int(input):
+    if type(input) == list:
+        output = []
+        for x in input:
+            output.append(int(x))
+        return output
+    elif type(input) == str:
+        return int(input)
+
 def load_env():
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
     SESSION = os.environ.get("SESSION")
     TOKEN = os.environ.get("TOKEN")
     ADMINS = os.environ.get("ADMINS")
-    ADMINS = ADMINS.split(" ")
-    CHAT_ID = os.environ.get("CHAT_ID")
+    ADMINS = str_to_int(ADMINS.split(" "))
+    CHAT_ID = str_to_int(os.environ.get("CHAT_ID"))
     return API_ID, API_HASH, SESSION, TOKEN, ADMINS, CHAT_ID
     
 if os.path.isfile("config.py"):
     from config import CONFIG, API_ID, API_HASH, SESSION, TOKEN, ADMINS, CHAT_ID
     if CONFIG:
-        API_ID = API_ID
+        API_ID = int(API_ID)
         API_HASH = API_HASH
         SESSION = SESSION
         TOKEN = TOKEN
         ADMINS = ADMINS
-        ADMINS = ADMINS.split(" ")
-        CHAT_ID = CHAT_ID
+        ADMINS = str_to_int(ADMINS.split(" "))
+        CHAT_ID = str_to_int(CHAT_ID)
     else:
         API_ID, API_HASH, SESSION, TOKEN, ADMINS, CHAT_ID = load_env()
 
