@@ -48,10 +48,10 @@ async def play_or_queue(source, status, typee=None):
         else:
             if len(music_queue) == 0:
                 music_queue.append(f"{source}%%{typee}")
-                if typee == "audio"
+                if typee == "audio":
                     await group_call.start_audio(source, repeat=False)
                     return "🚩 __Playing...__"
-                elif typee == "video"
+                elif typee == "video":
                     await group_call.start_video(source, repeat=False)
                     return "🚩 __Streaming...__"
             elif len(music_queue) < 0:
@@ -62,11 +62,12 @@ async def play_or_queue(source, status, typee=None):
             await group_call.stop()
             return
         elif len(music_queue) < 0:
-            if music_queue[0].split("%%")[-1] == "audio":
-                await group_call.start_audio(music_queue[0].split("%%")[0], repeat=False)
+            queue_obj = music_queue[0].split("%%")
+            if queue_obj[-1] == "audio":
+                await group_call.start_audio(queue_obj[0], repeat=False)
                 return
-            elif music_queue[0].split("%%")[-1] == "video":
-                await group_call.start_video(music_queue[0].split("%%")[0], repeat=False)
+            elif queue_obj[-1] == "video":
+                await group_call.start_video(queue_obj[0], repeat=False)
                 return
         
                     
