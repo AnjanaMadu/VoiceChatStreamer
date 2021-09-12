@@ -23,12 +23,13 @@ from bot import video_link_getter, yt_video_search, match_url
 from bot import vcusr, GROUP_CALLS
 
 async def check_vc_before_play(group_call, chat_id):
-    if (await group_call.is_video_running):
-        await group_call.stop_video()
-    elif (await group_call.is_audio_running):
-        await group_call.stop_audio()
-    elif (await group_call.is_running):
-        await group_call.stop_media()
+    if group_call.is_connected:
+        if group_call.is_video_running:
+            group_call.stop_video()
+        elif group_call.is_audio_running:
+            group_call.stop_audio()
+        elif group_call.is_running:
+            group_call.stop_media()
     else:
         await group_call.join(chat_id)
 
