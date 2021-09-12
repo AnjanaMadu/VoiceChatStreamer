@@ -14,3 +14,9 @@ SESSION = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # Add your bot token here
 TOKEN = "12345678:xxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Chat id where bot should work.
+CHAT_ID = -10010000000
+
+# Add ur TG ID, Seperate by spaces
+ADMINS = 123456789
