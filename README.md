@@ -31,7 +31,7 @@ _If you like to add your country radio stations, Please open pull request [here]
 
 ### 🏷 Deployment Guide 
 
-_Note: This bot does not leaving from vc after song or video ended. And this is not a bot. Just a userbot. How to use? You need to add String session own's user to your group. Ok now you added userbot to your group. Then do `!help`. Now you can get help menu. Read it and Do what you want by reffering help menu. For help [@harp_chat](https://t.me/harp_chat)_
+_Note: How to use? You need to add String session own's user to your group. Ok now you added userbot to your group. Then do `!help`. Now you can get help menu. Read it and Do what you want by reffering help menu. For help [@harp_chat](https://t.me/harp_chat)_
 
 <details>
   <summary>How to get <code>API_ID</code> and <code>API_HASH</code></summary>
