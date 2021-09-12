@@ -29,7 +29,7 @@ _🎯 Follow me and star this repo for more telegram bots._
 
 _If you like to add your country radio stations, Please open pull request [here](https://github.com/AnjanaMadu/radio_stations)_
 
-### 🏷 Deployment Guide
+### 🏷 Deployment Guide 
 
 _Note: This bot does not leaving from vc after song or video ended. And this is not a bot. Just a userbot. How to use? You need to add String session own's user to your group. Ok now you added userbot to your group. Then do `!help`. Now you can get help menu. Read it and Do what you want by reffering help menu. For help [@harp_chat](https://t.me/harp_chat)_
 
@@ -48,7 +48,7 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
   <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be there.
 </details>
 
-### 🏷 Self Host
+### 🏷 VPS Deployment Docker
 
 **For Linux (Ubuntu)**
 
@@ -66,6 +66,28 @@ _Note: This bot does not leaving from vc after song or video ended. And this is 
   - `sudo docker build . -t vcstreamer`
 - Start Bot
   - `sudo docker run vcstreamer`
+
+### 🏷 VPS Deployment Without Docker
+
+**For Linux (Ubuntu)**
+
+- Updating package list and Install wget, git
+  - `sudo apt-get update && sudo apt-get install wget git -y`
+- Install pip3
+  - `sudo apt install python3-pip`
+- Cloning Repo and Go to dir
+  - `git clone https://github.com/AnjanaMadu/VoiceChatStreamer bot`
+  - `cd bot`
+- _Now edit "config.py" with your values._
+  - `cd`
+  - `cd VoiceChatStreamer`
+- Install Requirements
+  - `pip3 install -U pip && pip3 install -r requirements.txt`
+- Start Bot
+  - `screen -S VoiceChatStreamer`
+  - `python3 -m bot`
+- Detach from the screen 
+  - Ctrl-a Ctrl-d
 
 
 ## 📌 Credits
