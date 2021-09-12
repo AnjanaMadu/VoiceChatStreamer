@@ -69,10 +69,7 @@ async def play_or_queue(source, status, typee=None):
             elif queue_obj[-1] == "video":
                 await group_call.start_video(queue_obj[0], repeat=False)
                 return
-        
-                    
-                
-    
+
 @Client.on_message(filters.command("help", "!"))
 async def help_vc(client, message):
     text = '''====== Help Menu ======
@@ -194,8 +191,8 @@ async def stream_vc(client, message):
         return await group_call.stop()
 
 @group_call.on_playout_ended
-async def playout_ended_check(gc, source, media_type)
-    if source == music_queue[0]:
+async def playout_ended_check(gc, source, media_type):
+    if source == music_queue[0].split("%%")[0]:
         os.remove(source)
         music_queue.pop(0)
     await play_or_queue(None, "check")
