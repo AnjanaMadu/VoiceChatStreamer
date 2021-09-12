@@ -47,6 +47,7 @@ _Note: How to use? You need to add String session own's user to your group. Ok n
   <b>Step 5:</b> Now ask for mobile fill it also.<br>
   <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be there.
 </details>
+
 - `TOKEN`: Bot Token
 - `CHAT_ID`: Chat ID where bot should work
 - `ADMINS`: Add ur TG ID, Seperate by spaces
