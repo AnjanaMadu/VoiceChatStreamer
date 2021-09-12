@@ -19,61 +19,36 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import os, asyncio
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
-from bot import vcusr, GROUP_CALLS
+from bot import vcusr, CHAT_ID, ADMINS
+from bot.plugins.player import group_call, vc_live
 
-MISC_DB = {}
+vc_paused = False
 
 @Client.on_message(filters.command("endvc", "!"))
 async def leave_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
-    group_call = GROUP_CALLS.get(CHAT_ID)
-    if group_call:
-        await group_call.stop()
-        await message.reply("__Left.__")
-        GROUP_CALLS.pop(CHAT_ID)
-    elif group_call is None:
-        return await message.reply("__No VC Running.__")
-        
-@Client.on_message(filters.command("showdb", "!"))
-async def dont_do_this_vc(client, message):
-    dbz = str(GROUP_CALLS) + "\n" + str(MISC_DB)
-    await message.reply(dbz)
+    global vc_live
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
+    await group_call.stop()
+    await message.reply("__Left.__")
+    vc_live = False
     
 @Client.on_message(filters.command("pause", "!"))
 async def pause_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
-    group_call = GROUP_CALLS.get(CHAT_ID)
-    if group_call is None:
-        return await message.reply("__No VC Running.__")
-    else:
-        status = MISC_DB.get(CHAT_ID)
-        if status is None:
-            await group_call.set_pause(True)
-            await message.reply("__VC Paused!__")
-            MISC_DB.update({CHAT_ID: "PAUSE:True"})
-        elif status == "PAUSE:False":
-            await group_call.set_pause(True)
-            await message.reply("__VC Paused!__")
-            MISC_DB.update({CHAT_ID: "PAUSE:True"})
-        elif status == "PAUSE:True":
-            return await message.reply("__Already Paused.__")
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
+    if vc_paused is False:
+        await group_call.set_pause(True)
+        await message.reply("__VC Paused!__")
+    elif vc_paused is True:
+        return await message.reply("__Already Paused.__")
           
 @Client.on_message(filters.command("resume", "!"))
 async def resume_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
-    group_call = GROUP_CALLS.get(CHAT_ID)
-    if group_call is None:
-        return await message.reply("__No VC Running.__")
-    else:
-        status = MISC_DB.get(CHAT_ID)
-        if status is None:
-            return await message.reply("__VC not Paused.__")
-        elif status == "PAUSE:True":
-            await group_call.set_pause(False)
-            await message.reply("__VC Resumed!__")
-            MISC_DB.pop(CHAT_ID)
-        elif status == "PAUSE:False":
-            return await message.reply("__VC not Paused.__")
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
+    if vc_paused is True:
+        await group_call.set_pause(False)
+        await message.reply("__VC Resumed!__")
+    elif vc_paused is False:
+        return await message.reply("__VC not Paused.__")
