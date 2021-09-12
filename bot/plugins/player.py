@@ -25,23 +25,11 @@ from bot import vcusr, QUEUE, ADMINS, CHAT_ID
 group_call = GroupCallFactory(vcusr).get_group_call()
 music_queue = []
 vc_live = False
-
-async def check_vc_before_play():
-    global group_call
-    if group_call.is_connected:
-        if (await group_call.is_video_running):
-            return True
-        elif (await group_call.is_audio_running):
-            return True
-        elif (await group_call.is_running):
-            return True
-    else:
-        await group_call.join(CHAT_ID)
-        return False
     
 async def play_or_queue(source, status, typee=None):
     global music_queue, vc_live, group_call
-    is_playing = await check_vc_before_play()
+    if not group_call.is_connected:
+        await group_call.join(CHAT_ID)
     if status == "add":
         if vc_live == True:
             return "Live ongoing. Do `!endvc`"
