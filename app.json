@@ -27,6 +27,10 @@
       "ADMINS": {
         "description": "Your telegram ID. If 2 or more, Seperate by space.",
         "required": true
+      },
+      "CHAT_ID": {
+        "description": "Chat ID where need to bot work.",
+        "required": true
       }
     }
   }
