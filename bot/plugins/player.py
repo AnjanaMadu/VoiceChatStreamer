@@ -20,19 +20,58 @@ import os, asyncio, pafy
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from bot import video_link_getter, yt_video_search, match_url
-from bot import vcusr, GROUP_CALLS
+from bot import vcusr, QUEUE, ADMINS, CHAT_ID
 
-async def check_vc_before_play(group_call, chat_id):
+group_call = GroupCallFactory(vcusr).get_group_call()
+music_queue = []
+vc_live = False
+
+async def check_vc_before_play():
+    global group_call
     if group_call.is_connected:
-        if group_call.is_video_running:
-            await group_call.stop_video()
-        elif group_call.is_audio_running:
-            await group_call.stop_audio()
-        elif group_call.is_running:
-            await group_call.stop_media()
+        if (await group_call.is_video_running):
+            return True
+        elif (await group_call.is_audio_running):
+            return True
+        elif (await group_call.is_running):
+            return True
     else:
-        await group_call.join(chat_id)
-
+        await group_call.join(CHAT_ID)
+        return False
+    
+async def play_or_queue(source, status, typee=None):
+    global music_queue, vc_live, group_call
+    is_playing = await check_vc_before_play()
+    if status == "add":
+        if vc_live == True:
+            return "Live ongoing. Do `!endvc`"
+        else:
+            if len(music_queue) == 0:
+                music_queue.append(f"{source}%%{typee}")
+                if typee == "audio"
+                    await group_call.start_audio(source, repeat=False)
+                    return "🚩 __Playing...__"
+                elif typee == "video"
+                    await group_call.start_video(source, repeat=False)
+                    return "🚩 __Streaming...__"
+            elif len(music_queue) < 0:
+                music_queue.append(f"{source}%%{typee}")
+                return f"🚩 __Queued at {len(music_queue)}__"
+    elif status == "check":
+        if len(music_queue) == 0:
+            await group_call.stop()
+            return
+        elif len(music_queue) < 0:
+            if music_queue[0].split("%%")[-1] == "audio":
+                await group_call.start_audio(music_queue[0].split("%%")[0], repeat=False)
+                return
+            elif music_queue[0].split("%%")[-1] == "video":
+                await group_call.start_video(music_queue[0].split("%%")[0], repeat=False)
+                return
+        
+                    
+                
+    
 @Client.on_message(filters.command("help", "!"))
 async def help_vc(client, message):
     text = '''====== Help Menu ======
@@ -54,8 +93,9 @@ async def help_vc(client, message):
 
 @Client.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
+    global vc_live
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
     msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
@@ -68,21 +108,19 @@ async def live_vc(client, message):
     if match_url(ytlink) is None:
         return await msg.edit(f"`{ytlink}`")
     try:
-        group_call = GROUP_CALLS.get(CHAT_ID)
-        if group_call is None:
-            group_call = GroupCallFactory(vcusr).get_group_call()
-            GROUP_CALLS.update({CHAT_ID: group_call})
-        await check_vc_before_play(group_call, CHAT_ID)
+        await group_call.reconnect()
         await msg.edit("🚩 __Live Streaming...__")
         await group_call.start_video(ytlink, repeat=False, enable_experimental_lip_sync=True)
+        vc_live = True
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
 
 @Client.on_message(filters.command("radio", "!"))
 async def radio_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
+    global vc_live
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
     msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     try: INPUT_SOURCE = message.text.split(" ", 1)[1]
@@ -90,21 +128,17 @@ async def radio_vc(client, message):
     if match_url(INPUT_SOURCE) is None:
         return await msg.edit("🔎 __Give me a valid URL__")
     try:
-        group_call = GROUP_CALLS.get(CHAT_ID)
-        if group_call is None:
-            group_call = GroupCallFactory(vcusr).get_group_call()
-            GROUP_CALLS.update({CHAT_ID: group_call})
-        await check_vc_before_play(group_call, CHAT_ID)
+        await group_call.reconnect()
         await msg.edit("🚩 __Radio Playing...__")
         await group_call.start_audio(INPUT_SOURCE, repeat=False)
+        vc_live = True
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
     
 @Client.on_message(filters.command("play", "!"))
 async def play_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
+    if not message.chat.id == CHAT_ID: return
     msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     if media:
@@ -124,21 +158,15 @@ async def play_vc(client, message):
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        group_call = GROUP_CALLS.get(CHAT_ID)
-        if group_call is None:
-            group_call = GroupCallFactory(vcusr).get_group_call()
-            GROUP_CALLS.update({CHAT_ID: group_call})
-        await check_vc_before_play(group_call, CHAT_ID)
-        await msg.edit("🚩 __Playing...__")
-        await group_call.start_audio(LOCAL_FILE, repeat=False)
+        resp = await play_or_queue(LOCAL_FILE, "add", "audio")
+        await msg.edit(resp)
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
 
 @Client.on_message(filters.command("stream", "!"))
 async def stream_vc(client, message):
-    CHAT_ID = message.chat.id
-    if not str(CHAT_ID).startswith("-100"): return
+    if not message.chat.id == CHAT_ID: return
     msg = await message.reply("⏳ __Please wait.__")
     media = message.reply_to_message
     if media:
@@ -158,13 +186,15 @@ async def stream_vc(client, message):
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        group_call = GROUP_CALLS.get(CHAT_ID)
-        if group_call is None:
-            group_call = GroupCallFactory(vcusr).get_group_call()
-            GROUP_CALLS.update({CHAT_ID: group_call})
-        await check_vc_before_play(group_call, CHAT_ID)
-        await msg.edit("🚩 Streaming...__")
-        await group_call.start_video(LOCAL_FILE, repeat=False, enable_experimental_lip_sync=True)
+        resp = await play_or_queue(LOCAL_FILE, "add", "video")
+        await msg.edit(resp)
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
+
+@group_call.on_playout_ended
+async def playout_ended_check(gc, source, media_type)
+    if source == music_queue[0]:
+        os.remove(source)
+        music_queue.pop(0)
+    await play_or_queue(None, "check")
