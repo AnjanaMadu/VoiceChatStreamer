@@ -26,7 +26,7 @@ group_call = GroupCallFactory(vcusr).get_group_call()
 music_queue = []
 vc_live = False
     
-async def play_or_queue(source, status, typee=None):
+async def play_or_queue(source, status, typee):
     global music_queue, vc_live, group_call
     if not group_call.is_connected:
         await group_call.join(CHAT_ID)
@@ -35,28 +35,28 @@ async def play_or_queue(source, status, typee=None):
             return "Live ongoing. Do `!endvc`"
         else:
             if len(music_queue) == 0:
-                music_queue.append(f"{source}%%{typee}")
+                music_queue.append({'source': source, 'type': typee})
                 if typee == "audio":
                     await group_call.start_audio(source, repeat=False)
                     return "🚩 __Playing...__"
                 elif typee == "video":
                     await group_call.start_video(source, repeat=False)
                     return "🚩 __Streaming...__"
-            elif len(music_queue) < 0:
-                music_queue.append(f"{source}%%{typee}")
+            elif len(music_queue) > 0:
+                music_queue.append({'source': source, 'type': typee})
                 return f"🚩 __Queued at {len(music_queue)}__"
     elif status == "check":
         if len(music_queue) == 0:
             await group_call.stop()
-            return
-        elif len(music_queue) < 0:
-            queue_obj = music_queue[0].split("%%")
-            if queue_obj[-1] == "audio":
-                await group_call.start_audio(queue_obj[0], repeat=False)
-                return
-            elif queue_obj[-1] == "video":
-                await group_call.start_video(queue_obj[0], repeat=False)
-                return
+            return "Queue empty. Leaving"
+        elif len(music_queue) > 0:
+            source = music_queue[0]['source']
+            if music_queue[0]['type'] == "audio":
+                await group_call.start_audio(source, repeat=False)
+                return f"Playing {os.path.basename(source)}"
+            elif music_queue[0]['type'] == "video":
+                await group_call.start_video(source, repeat=False)
+                return f"Streaming {os.path.basename(source)}"
 
 @Client.on_message(filters.command("help", "!"))
 async def help_vc(client, message):
@@ -94,7 +94,10 @@ async def live_vc(client, message):
     if match_url(ytlink) is None:
         return await msg.edit(f"`{ytlink}`")
     try:
-        await group_call.reconnect()
+        if not group_call.is_connected:
+            await group_call.join(CHAT_ID)
+        else:
+            await group_call.reconnect()
         await msg.edit("🚩 __Live Streaming...__")
         await group_call.start_video(ytlink, repeat=False, enable_experimental_lip_sync=True)
         vc_live = True
@@ -114,7 +117,10 @@ async def radio_vc(client, message):
     if match_url(INPUT_SOURCE) is None:
         return await msg.edit("🔎 __Give me a valid URL__")
     try:
-        await group_call.reconnect()
+        if not group_call.is_connected:
+            await group_call.join(CHAT_ID)
+        else:
+            await group_call.reconnect()
         await msg.edit("🚩 __Radio Playing...__")
         await group_call.start_audio(INPUT_SOURCE, repeat=False)
         vc_live = True
@@ -180,7 +186,9 @@ async def stream_vc(client, message):
 
 @group_call.on_playout_ended
 async def playout_ended_check(gc, source, media_type):
-    if source == music_queue[0].split("%%")[0]:
+    if len(music_queue) == 0: return
+    if source == music_queue[0]['source']:
         os.remove(source)
         music_queue.pop(0)
-    await play_or_queue(None, "check")
+    status = await play_or_queue(None, "check", None)
+    print(status)
