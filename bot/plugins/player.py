@@ -20,7 +20,7 @@ import os, asyncio, pafy
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from bot import video_link_getter, yt_video_search, match_url
-from bot import vcusr, QUEUE, ADMINS, CHAT_ID
+from bot import vcusr, ADMINS, CHAT_ID
 
 group_call = GroupCallFactory(vcusr).get_group_call()
 music_queue = []
@@ -28,7 +28,7 @@ vc_live = False
     
 async def play_or_queue(source, status, typee):
     global music_queue, vc_live, group_call
-    if not group_call.is_connected:
+    if not (await group_call.is_connected):
         await group_call.join(CHAT_ID)
     if status == "add":
         if vc_live == True:
