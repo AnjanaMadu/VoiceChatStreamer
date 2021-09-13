@@ -83,7 +83,10 @@ async def live_vc(client, message):
         if not group_call.is_connected:
             await group_call.join(CHAT_ID)
         else:
-            await group_call.reconnect()
+            await group_call.stop()
+            await asyncio.sleep(3)
+            await group_call.join(CHAT_ID)
+            
         await msg.edit("🚩 __Live Streaming...__")
         await group_call.start_video(ytlink, repeat=False, enable_experimental_lip_sync=True)
         vc_live = True
@@ -106,7 +109,10 @@ async def radio_vc(client, message):
         if not group_call.is_connected:
             await group_call.join(CHAT_ID)
         else:
-            await group_call.reconnect()
+            await group_call.stop()
+            await asyncio.sleep(3)
+            await group_call.join(CHAT_ID)
+            
         await msg.edit("🚩 __Radio Playing...__")
         await group_call.start_audio(INPUT_SOURCE, repeat=False)
         vc_live = True
