@@ -19,50 +19,52 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import os, asyncio, pafy, youtube_dl
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
-from bot import video_link_getter, yt_video_search, match_url
+from bot import video_info_extract, yt_video_search, match_url
 from bot import vcusr, ADMINS, CHAT_ID
 
 group_call = GroupCallFactory(vcusr).get_group_call()
 music_queue = []
 vc_live = False
     
-async def play_or_queue(status, source=None, title=None, typee=None):
-    global music_queue, vc_live, group_call
+async def play_or_queue(status, data=None):
+    global music_queue, group_call
     if not group_call.is_connected:
         await group_call.join(CHAT_ID)
     if status == "add":
         if len(music_queue) == 0:
-            music_queue.append({'source': source, 'type': typee, 'title': title})
-            if typee == "audio":
-                await group_call.start_audio(source, repeat=False)
-                return f"🚩 __{title} is Playing...__"
-            elif typee == "video":
-                await group_call.start_video(source, repeat=False)
-                return f"🚩 __{title} is Streaming...__"
+            music_queue.append(data)
+            if data['TYPE'] == "audio":
+                await group_call.start_audio(data['LOCAL_FILE'], repeat=False)
+                return {'status':'play', 'msg':f'🚩 __{data['VIDEO_TITLE']} is Playing...__\n**Duration:** `{data['VIDEO_DURATION']}`', 'thumb': data['THUMB_URL']}
+            elif data['TYPE'] == "video":
+                await group_call.start_video(data['LOCAL_FILE'], repeat=False)
+                return {'status':'play', 'msg':f'🚩 __{data['VIDEO_TITLE']} is Streaming...__\n**Duration:** `{data['VIDEO_DURATION']}`', 'thumb': data['THUMB_URL']}
         elif len(music_queue) > 0:
-            music_queue.append({'source': source, 'type': typee, 'title': title})
-            return f"🚩 __Queued at {len(music_queue)}__"
+            music_queue.append(data)
+            return {'status':'queue', 'msg':f'🚩 __Queued at {len(music_queue)-1}__'}
     elif status == "check":
         if len(music_queue) == 0:
             await group_call.stop()
-            return "💬 __Queue empty. Leaving...__"
+            return {'status':'empty' 'msg':'💬 __Queue empty. Leaving...__'}
         elif len(music_queue) > 0:
-            source = music_queue[0]['source']
-            typii = music_queue[0]['type']
-            titlee = music_queue[0]['title']
-            if typii == "audio":
+            data = music_queue[0]
+            if data['TYPE'] == "audio":
                 await group_call.start_audio(source, repeat=False)
-                return f"🚩 __{titlee} is Playing...__"
-            elif typii == "video":
+                return {'status':'play', 'msg':f'🚩 __{data['VIDEO_TITLE']} is Playing...__\n**Duration:** `{data['VIDEO_DURATION']}`', 'thumb': data['THUMB_URL']}
+            elif data['TYPE'] == "video":
                 await group_call.start_video(source, repeat=False)
-                return f"🚩 __{titlee} is Streaming...__"
+                return {'status':'play', 'msg':f'🚩 __{data['VIDEO_TITLE']} is Streaming...__\n**Duration:** `{data['VIDEO_DURATION']}`', 'thumb': data['THUMB_URL']}
 
-def get_video_title(url):
-    with youtube_dl.YoutubeDL({'quite':True}) as ytdl:
-        ytdl_data = ytdl.extract_info(url, False)
-        
-    return ytdl_data['title']
-            
+@Client.on_message(filters.command("endvc", "!"))
+async def leave_vc(client, message):
+    global vc_live
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
+    await group_call.stop()
+    vc_live = False
+    music_queue.clear()
+    await message.reply_sticker("CAADBQADCAMAAtFreFVNNKAMgNe-YwI")
+    
 @Client.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
     global vc_live
@@ -128,7 +130,8 @@ async def play_vc(client, message):
     if vc_live == True:
         return await msg.edit("💬 __Live or Radio Ongoing. Please stop it via `!endvc`.__")
     media = message.reply_to_message
-    if media:
+    THUMB_URL, VIDEO_TITLE, VIDEO_DURATION = "https://appletld.com/wp-content/uploads/2020/10/E3593D8D-6F1C-4A16-B065-2154ED6B2355.png", "Music", "Not Found"
+    if media and media.media:
         await msg.edit("📥 __Downloading...__")
         LOCAL_FILE = await client.download_media(media)
     else:
@@ -141,13 +144,17 @@ async def play_vc(client, message):
             if FINAL_URL == 404:
                 return await msg.edit("__No videos found__ 🤷‍♂️")
         await msg.edit("📥 __Downloading...__")
-        LOCAL_FILE = video_link_getter(FINAL_URL, key="audio")
-        VIDEO_TITLE = get_video_title(FINAL_URL)
+        LOCAL_FILE, THUMB_URL, VIDEO_TITLE, VIDEO_DURATION = video_info_extract(FINAL_URL, key="audio")
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        resp = await play_or_queue("add", LOCAL_FILE, VIDEO_TITLE, "audio")
-        await msg.edit(resp)
+        post_data = {'LOCAL_FILE':LOCAL_FILE, 'THUMB_URL':THUMB_URL, 'VIDEO_TITLE':VIDEO_TITLE, 'VIDEO_DURATION':VIDEO_DURATION, 'TYPE':'audio'}
+        resp = await play_or_queue("add", post_data, "audio")
+        if resp['status'] == 'queue':
+            await msg.edit(resp['msg'])
+        elif resp['status'] == 'play':
+            await msg.delete()
+            await message.reply_photo(resp['thumb'], caption=resp['msg'])
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
@@ -160,7 +167,8 @@ async def stream_vc(client, message):
     if vc_live == True:
         return await msg.edit("💬 __Live or Radio Ongoing. Please stop it via `!endvc`.__")
     media = message.reply_to_message
-    if media:
+    THUMB_URL, VIDEO_TITLE, VIDEO_DURATION = "https://appletld.com/wp-content/uploads/2020/10/E3593D8D-6F1C-4A16-B065-2154ED6B2355.png", "Music", "Not Found"
+    if media and media.media:
         await msg.edit("📥 __Downloading...__")
         LOCAL_FILE = await client.download_media(media)
     else:
@@ -173,13 +181,16 @@ async def stream_vc(client, message):
             if FINAL_URL == 404:
                 return await msg.edit("__No videos found__ 🤷‍♂️")
         await msg.edit("📥 __Downloading...__")
-        LOCAL_FILE = video_link_getter(FINAL_URL, key="video")
-        VIDEO_TITLE = get_video_title(FINAL_URL)
+        LOCAL_FILE, THUMB_URL, VIDEO_TITLE, VIDEO_DURATION = video_info_extract(FINAL_URL, key="audio")
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
-         
     try:
-        resp = await play_or_queue("add", LOCAL_FILE, VIDEO_TITLE, "video")
-        await msg.edit(resp)
+        post_data = {'LOCAL_FILE':LOCAL_FILE, 'THUMB_URL':THUMB_URL, 'VIDEO_TITLE':VIDEO_TITLE, 'VIDEO_DURATION':VIDEO_DURATION, 'TYPE':'video'}
+        resp = await play_or_queue("add", post_data)
+        if resp['status'] == 'queue':
+            await msg.edit(resp['msg'])
+        elif resp['status'] == 'play':
+            await msg.delete()
+            await message.reply_photo(resp['thumb'], caption=resp['msg'])
     except Exception as e:
         await message.reply(str(e))
         return await group_call.stop()
@@ -193,11 +204,13 @@ async def skip_vc(client, message):
         await group_call.stop_media()
     elif group_call.is_running:
         await group_call.stop_media()
-        
     os.remove(music_queue[0]['source'])
     music_queue.pop(0)
-    status = await play_or_queue("check")
-    await message.reply(status)
+    resp = await play_or_queue("check")
+    if resp['status'] == 'empty':
+        await message.reply(resp['msg'])
+    elif resp['status'] == 'play':
+        await message.reply_photo(resp['thumb'], caption=resp['msg'])
     
 @group_call.on_playout_ended
 async def playout_ended_check(gc, source, media_type):
@@ -205,4 +218,8 @@ async def playout_ended_check(gc, source, media_type):
     if source == music_queue[0]['source']:
         os.remove(source)
         music_queue.pop(0)
-    await play_or_queue("check")
+    resp = await play_or_queue("check")
+    if resp['status'] == 'empty':
+        await message.reply(resp['msg'])
+    elif resp['status'] == 'play':
+        await message.reply_photo(resp['thumb'], caption=resp['msg'])
