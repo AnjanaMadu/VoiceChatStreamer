@@ -197,7 +197,9 @@ async def stream_vc(client, message):
 
 @Client.on_message(filters.command("skip", "!"))
 async def skip_vc(client, message):
-    if len(music_queue) == 0: return
+    if not message.chat.id == CHAT_ID: return
+    if not message.from_user.id in ADMINS: return
+    if len(music_queue) == 0: return await message.reply("💬 __Nothing in queue.__")
     if group_call.is_video_running:
         await group_call.stop_media()
     elif group_call.is_audio_running:
