@@ -53,3 +53,22 @@ async def resume_vc(client, message):
         await message.reply("__VC Resumed!__")
     elif vc_paused is False:
         return await message.reply("__VC not Paused.__")
+
+@Client.on_message(filters.command("help", "!"))
+async def help_vc(client, message):
+    text = '''====== Help Menu ======
+**Play as Audio**
+- !play __(reply to audio / youtube url / search query)__
+- !radio __(radio stream url)__
+
+**Play as Video**
+- !stream __(reply to video / youtube url / search query)__
+- !live __(youtube live stream url)__
+
+**Extra**
+- !endvc: Leave from vc
+- !pause: Pause the vc
+- !resume: Resume the vc
+- !video: Download url or search query in video format
+- !audio: Download url or search query in audio format'''
+    await message.reply(text)
