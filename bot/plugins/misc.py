@@ -23,6 +23,7 @@ from bot import vcusr, CHAT_ID, ADMINS
 from bot.plugins.player import group_call, vc_live, music_queue
 
 vc_paused = False
+vc_live = vc_live
 
 @Client.on_message(filters.command("endvc", "!"))
 async def leave_vc(client, message):
