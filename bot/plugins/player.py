@@ -31,20 +31,17 @@ async def play_or_queue(source, status, typee):
     if not group_call.is_connected:
         await group_call.join(CHAT_ID)
     if status == "add":
-        if vc_live == True:
-            return "Live ongoing. Do `!endvc`"
-        else:
-            if len(music_queue) == 0:
-                music_queue.append({'source': source, 'type': typee})
-                if typee == "audio":
-                    await group_call.start_audio(source, repeat=False)
-                    return "🚩 __Playing...__"
-                elif typee == "video":
-                    await group_call.start_video(source, repeat=False)
-                    return "🚩 __Streaming...__"
-            elif len(music_queue) > 0:
-                music_queue.append({'source': source, 'type': typee})
-                return f"🚩 __Queued at {len(music_queue)}__"
+        if len(music_queue) == 0:
+            music_queue.append({'source': source, 'type': typee})
+            if typee == "audio":
+                await group_call.start_audio(source, repeat=False)
+                return "🚩 __Playing...__"
+            elif typee == "video":
+                await group_call.start_video(source, repeat=False)
+                return "🚩 __Streaming...__"
+        elif len(music_queue) > 0:
+            music_queue.append({'source': source, 'type': typee})
+            return f"🚩 __Queued at {len(music_queue)}__"
     elif status == "check":
         if len(music_queue) == 0:
             await group_call.stop()
@@ -57,25 +54,6 @@ async def play_or_queue(source, status, typee):
             elif music_queue[0]['type'] == "video":
                 await group_call.start_video(source, repeat=False)
                 return f"Streaming {os.path.basename(source)}"
-
-@Client.on_message(filters.command("help", "!"))
-async def help_vc(client, message):
-    text = '''====== Help Menu ======
-**Play as Audio**
-- !play __(reply to audio / youtube url / search query)__
-- !radio __(radio stream url)__
-
-**Play as Video**
-- !stream __(reply to video / youtube url / search query)__
-- !live __(youtube live stream url)__
-
-**Extra**
-- !endvc: Leave from vc
-- !pause: Pause the vc
-- !resume: Resume the vc
-- !video: Download url or search query in video format
-- !audio: Download url or search query in audio format'''
-    await message.reply(text)
 
 @Client.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
@@ -191,4 +169,4 @@ async def playout_ended_check(gc, source, media_type):
         os.remove(source)
         music_queue.pop(0)
     status = await play_or_queue(None, "check", None)
-    print(status)
+    os.system(f'echo "{status}"')
