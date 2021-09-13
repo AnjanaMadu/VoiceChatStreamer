@@ -45,7 +45,7 @@ async def play_or_queue(status, data=None):
     elif status == "check":
         if len(music_queue) == 0:
             await group_call.stop()
-            return {"status":"empty" "msg":"💬 __Queue empty. Leaving...__"}
+            return {"status":"empty", "msg":"💬 __Queue empty. Leaving...__"}
         elif len(music_queue) > 0:
             data = music_queue[0]
             if data['TYPE'] == "audio":
