@@ -220,6 +220,6 @@ async def playout_ended_check(gc, source, media_type):
         music_queue.pop(0)
     resp = await play_or_queue("check")
     if resp['status'] == 'empty':
-        await Client.send_message(CHAT_ID, resp['msg'])
+        await Client.send_message(chat_id=CHAT_ID, text=resp['msg'])
     elif resp['status'] == 'play':
-        await Client.send_photo(CHAT_ID, resp['thumb'], caption=resp['msg'])
+        await Client.send_photo(chat_id=CHAT_ID, photo=resp['thumb'], caption=resp['msg'])
