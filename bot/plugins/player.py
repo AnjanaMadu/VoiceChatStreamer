@@ -49,10 +49,10 @@ async def play_or_queue(status, data=None):
         elif len(music_queue) > 0:
             data = music_queue[0]
             if data['TYPE'] == "audio":
-                await group_call.start_audio(source, repeat=False)
+                await group_call.start_audio(data['LOCAL_FILE'], repeat=False)
                 return {"status":"play", "msg":f"🚩 __{data['VIDEO_TITLE']} is Playing...__\n**Duration:** `{data['VIDEO_DURATION']}`", "thumb":data['THUMB_URL']}
             elif data['TYPE'] == "video":
-                await group_call.start_video(source, repeat=False)
+                await group_call.start_video(data['LOCAL_FILE'], repeat=False)
                 return {"status":"play", "msg":f"🚩 __{data['VIDEO_TITLE']} is Streaming...__\n**Duration:** `{data['VIDEO_DURATION']}`", "thumb":data['THUMB_URL']}
 
 @Client.on_message(filters.command("endvc", "!"))
