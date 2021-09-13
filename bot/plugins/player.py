@@ -149,7 +149,7 @@ async def play_vc(client, message):
          
     try:
         post_data = {'LOCAL_FILE':LOCAL_FILE, 'THUMB_URL':THUMB_URL, 'VIDEO_TITLE':VIDEO_TITLE, 'VIDEO_DURATION':VIDEO_DURATION, 'TYPE':'audio'}
-        resp = await play_or_queue("add", post_data, "audio")
+        resp = await play_or_queue("add", post_data)
         if resp['status'] == 'queue':
             await msg.edit(resp['msg'])
         elif resp['status'] == 'play':
@@ -204,7 +204,7 @@ async def skip_vc(client, message):
         await group_call.stop_media()
     elif group_call.is_running:
         await group_call.stop_media()
-    os.remove(music_queue[0]['source'])
+    os.remove(music_queue[0]['LOCAL_FILE'])
     music_queue.pop(0)
     resp = await play_or_queue("check")
     if resp['status'] == 'empty':
@@ -215,11 +215,11 @@ async def skip_vc(client, message):
 @group_call.on_playout_ended
 async def playout_ended_check(gc, source, media_type):
     if len(music_queue) == 0: return
-    if source == music_queue[0]['source']:
+    if source == music_queue[0]['LOCAL_FILE']:
         os.remove(source)
         music_queue.pop(0)
     resp = await play_or_queue("check")
     if resp['status'] == 'empty':
-        await message.reply(resp['msg'])
+        await Client.send_message(CHAT_ID, resp['msg'])
     elif resp['status'] == 'play':
-        await message.reply_photo(resp['thumb'], caption=resp['msg'])
+        await Client.send_photo(CHAT_ID, resp['thumb'], caption=resp['msg'])
