@@ -20,7 +20,7 @@ import os, asyncio
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from bot import vcusr, CHAT_ID, ADMINS
-from bot.plugins.player import group_call, vc_live
+from bot.plugins.player import group_call, vc_live, music_queue
 
 vc_paused = False
 
@@ -32,6 +32,7 @@ async def leave_vc(client, message):
     await group_call.stop()
     await message.reply("__Left.__")
     vc_live = False
+    music_queue.clear()
     
 @Client.on_message(filters.command("pause", "!"))
 async def pause_vc(client, message):
