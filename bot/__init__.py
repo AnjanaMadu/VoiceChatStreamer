@@ -49,14 +49,17 @@ def gerenate_random_fname(ifile, typee):
     os.rename(ifile, final_fname)
     return final_fname
 
-def video_link_getter(url: str, key=None):
+def video_info_extract(url: str, key=None):
     try:
         yt = YouTube(url)
+        video = pafy.new(url)
         if key == "video":
             x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
         elif key == "audio":
             x = yt.streams.filter(type="audio")[-1].download()
-        return gerenate_random_fname(x, key)
+        filname = gerenate_random_fname(x, key)
+        thumburl = f"https://i.ytimg.com/vi/{video.videoid}/maxresdefault.jpg"
+        return filname, thumburl, video.title, video.duration
     except Exception as e:
         print(str(e))
         return 500
