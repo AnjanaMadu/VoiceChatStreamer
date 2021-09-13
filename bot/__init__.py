@@ -1,9 +1,8 @@
-import os, sys, asyncio, re, pafy
+import os, sys, random, asyncio
+import re, pafy
 from pyrogram import Client
 from youtubesearchpython import VideosSearch
 from pytube import YouTube
-
-QUEUE = []
 
 def str_to_int(input):
     if type(input) == list:
@@ -43,6 +42,13 @@ vcusr = Client(
     API_HASH
 )
 
+def gerenate_random_fname(ifile, typee):
+    random_number = random.randint(11111, 99999)
+    input_ext = ifile.split(".")[-1]
+    final_fname = f"{typee}-{random_number}.{input_ext}"
+    os.rename(ifile, final_fname)
+    return final_fname
+
 def video_link_getter(url: str, key=None):
     try:
         yt = YouTube(url)
@@ -50,7 +56,7 @@ def video_link_getter(url: str, key=None):
             x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
         elif key == "a":
             x = yt.streams.filter(type="audio")[-1].download()
-        return x
+        return gerenate_random_fname(x, key)
     except Exception as e:
         print(str(e))
         return 500
