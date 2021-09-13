@@ -26,35 +26,43 @@ group_call = GroupCallFactory(vcusr).get_group_call()
 music_queue = []
 vc_live = False
     
-async def play_or_queue(source, status, typee):
+async def play_or_queue(status, source=None, title=None, typee=None):
     global music_queue, vc_live, group_call
     if not group_call.is_connected:
         await group_call.join(CHAT_ID)
     if status == "add":
         if len(music_queue) == 0:
-            music_queue.append({'source': source, 'type': typee})
+            music_queue.append({'source': source, 'type': typee, 'title': title})
             if typee == "audio":
                 await group_call.start_audio(source, repeat=False)
-                return "🚩 __Playing...__"
+                return f"🚩 __{title} is Playing...__"
             elif typee == "video":
                 await group_call.start_video(source, repeat=False)
-                return "🚩 __Streaming...__"
+                return f"🚩 __{title} is Streaming...__"
         elif len(music_queue) > 0:
-            music_queue.append({'source': source, 'type': typee})
+            music_queue.append({'source': source, 'type': typee, 'title': title})
             return f"🚩 __Queued at {len(music_queue)}__"
     elif status == "check":
         if len(music_queue) == 0:
             await group_call.stop()
-            return "Queue empty. Leaving"
+            return "💬 __Queue empty. Leaving...__"
         elif len(music_queue) > 0:
             source = music_queue[0]['source']
-            if music_queue[0]['type'] == "audio":
+            typii = music_queue[0]['type']
+            titlee = music_queue[0]['title']
+            if typii == "audio":
                 await group_call.start_audio(source, repeat=False)
-                return f"Playing {os.path.basename(source)}"
-            elif music_queue[0]['type'] == "video":
+                return f"🚩 __{titlee} is Playing...__"
+            elif typii == "video":
                 await group_call.start_video(source, repeat=False)
-                return f"Streaming {os.path.basename(source)}"
+                return f"🚩 __{titlee} is Streaming...__"
 
+def get_video_title(url):
+    with youtube_dl.YoutubeDL({'quite':True}) as ytdl:
+        ytdl_data = ytdl.extract_info(url, False)
+        
+    return ytdl_data['title']
+            
 @Client.on_message(filters.command("live", "!"))
 async def live_vc(client, message):
     global vc_live
@@ -108,8 +116,11 @@ async def radio_vc(client, message):
     
 @Client.on_message(filters.command("play", "!"))
 async def play_vc(client, message):
+    global vc_live
     if not message.chat.id == CHAT_ID: return
     msg = await message.reply("⏳ __Please wait.__")
+    if vc_live == True:
+        return await msg.edit("💬 __Live or Radio Ongoing. Please stop it via `!endvc`.__")
     media = message.reply_to_message
     if media:
         await msg.edit("📥 __Downloading...__")
@@ -124,11 +135,12 @@ async def play_vc(client, message):
             if FINAL_URL == 404:
                 return await msg.edit("__No videos found__ 🤷‍♂️")
         await msg.edit("📥 __Downloading...__")
-        LOCAL_FILE = video_link_getter(FINAL_URL, key="a")
+        LOCAL_FILE = video_link_getter(FINAL_URL, key="audio")
+        VIDEO_TITLE = get_video_title(FINAL_URL)
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        resp = await play_or_queue(LOCAL_FILE, "add", "audio")
+        resp = await play_or_queue("add", LOCAL_FILE, VIDEO_TITLE, "audio")
         await msg.edit(resp)
     except Exception as e:
         await message.reply(str(e))
@@ -136,8 +148,11 @@ async def play_vc(client, message):
 
 @Client.on_message(filters.command("stream", "!"))
 async def stream_vc(client, message):
+    global vc_live
     if not message.chat.id == CHAT_ID: return
     msg = await message.reply("⏳ __Please wait.__")
+    if vc_live == True:
+        return await msg.edit("💬 __Live or Radio Ongoing. Please stop it via `!endvc`.__")
     media = message.reply_to_message
     if media:
         await msg.edit("📥 __Downloading...__")
@@ -152,11 +167,12 @@ async def stream_vc(client, message):
             if FINAL_URL == 404:
                 return await msg.edit("__No videos found__ 🤷‍♂️")
         await msg.edit("📥 __Downloading...__")
-        LOCAL_FILE = video_link_getter(FINAL_URL, key="v")
+        LOCAL_FILE = video_link_getter(FINAL_URL, key="video")
+        VIDEO_TITLE = get_video_title(FINAL_URL)
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
          
     try:
-        resp = await play_or_queue(LOCAL_FILE, "add", "video")
+        resp = await play_or_queue("add", LOCAL_FILE, VIDEO_TITLE, "video")
         await msg.edit(resp)
     except Exception as e:
         await message.reply(str(e))
@@ -174,8 +190,8 @@ async def skip_vc(client, message):
         
     os.remove(music_queue[0]['source'])
     music_queue.pop(0)
-    status = await play_or_queue(None, "check", None)
-    os.system(f'echo {status}')
+    status = await play_or_queue("check")
+    await message.reply(status)
     
 @group_call.on_playout_ended
 async def playout_ended_check(gc, source, media_type):
@@ -183,5 +199,4 @@ async def playout_ended_check(gc, source, media_type):
     if source == music_queue[0]['source']:
         os.remove(source)
         music_queue.pop(0)
-    status = await play_or_queue(None, "check", None)
-    os.system(f'echo {status}')
+    await play_or_queue("check")
