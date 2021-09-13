@@ -28,7 +28,7 @@ vc_live = False
     
 async def play_or_queue(source, status, typee):
     global music_queue, vc_live, group_call
-    if not (await group_call.is_connected):
+    if not group_call.is_connected:
         await group_call.join(CHAT_ID)
     if status == "add":
         if vc_live == True:
