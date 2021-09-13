@@ -162,6 +162,21 @@ async def stream_vc(client, message):
         await message.reply(str(e))
         return await group_call.stop()
 
+@Client.on_message(filters.command("skip", "!"))
+async def skip_vc(client, message):
+    if len(music_queue) == 0: return
+    if group_call.is_video_running:
+        await group_call.stop_media()
+    elif group_call.is_audio_running:
+        await group_call.stop_media()
+    elif group_call.is_running:
+        await group_call.stop_media()
+        
+    os.remove(music_queue[0]['source'])
+    music_queue.pop(0)
+    status = await play_or_queue(None, "check", None)
+    os.system(f'echo {status}')
+    
 @group_call.on_playout_ended
 async def playout_ended_check(gc, source, media_type):
     if len(music_queue) == 0: return
@@ -169,4 +184,4 @@ async def playout_ended_check(gc, source, media_type):
         os.remove(source)
         music_queue.pop(0)
     status = await play_or_queue(None, "check", None)
-    os.system(f'echo "{status}"')
+    os.system(f'echo {status}')
