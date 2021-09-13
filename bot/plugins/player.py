@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 '''
 
-import os, asyncio, pafy
+import os, asyncio, pafy, youtube_dl
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from bot import video_link_getter, yt_video_search, match_url
