@@ -52,9 +52,9 @@ def gerenate_random_fname(ifile, typee):
 def video_link_getter(url: str, key=None):
     try:
         yt = YouTube(url)
-        if key == "v":
+        if key == "video":
             x = yt.streams.filter(file_extension="mp4", res="720p")[0].download()
-        elif key == "a":
+        elif key == "audio":
             x = yt.streams.filter(type="audio")[-1].download()
         return gerenate_random_fname(x, key)
     except Exception as e:
