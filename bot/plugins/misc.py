@@ -66,9 +66,10 @@ async def help_vc(client, message):
 - !live __(youtube live stream url)__
 
 **Extra**
-- !endvc: Leave from vc
-- !pause: Pause the vc
-- !resume: Resume the vc
-- !video: Download url or search query in video format
-- !audio: Download url or search query in audio format'''
+- !endvc: Leave from vc.
+- !skip: Skip the current song.
+- !pause: Pause the vc.
+- !resume: Resume the vc.
+- !video: Download url or search query in video format.
+- !audio: Download url or search query in audio format.'''
     await message.reply(text)
