@@ -40,12 +40,10 @@ _Note: How to use? You need to add String session own's user to your group. Ok n
 
 <details>
   <summary>How to generate <code>SESSION</code>?</summary>
-  <b>Step 1:</b> Go to <a href="https://replit.com/@AnjanaMadu/GenerateStringSession">here</a>.<br>
-  <b>Step 2:</b> Click run button and wait.<br>
-  <b>Step 3:</b> Not ask for option. Fill number 1.<br>
-  <b>Step 4:</b> Now ask for API ID and API HASH. Fill them.<br>
-  <b>Step 5:</b> Now ask for mobile fill it also.<br>
-  <b>Final Step:</b> Now ask for confirmation. Fill it. TraLaa. Now check saved. String Session will be there.
+  <b>Tutorial Video: </b> https://youtu.be/AuP0N8KXJ6U
+  <p>
+    <i>*We do not collect or share any of your personal information. You can revoke any of then using telegram settings. And also remember to keep your string session in a safe place and don't give it to anyone</i>
+  </p>
 </details>
 
 - `TOKEN`: Bot Token
