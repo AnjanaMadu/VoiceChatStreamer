@@ -181,7 +181,7 @@ async def stream_vc(client, message):
             if FINAL_URL == 404:
                 return await msg.edit("__No videos found__ 🤷‍♂️")
         await msg.edit("📥 __Downloading...__")
-        LOCAL_FILE, THUMB_URL, VIDEO_TITLE, VIDEO_DURATION = video_info_extract(FINAL_URL, key="audio")
+        LOCAL_FILE, THUMB_URL, VIDEO_TITLE, VIDEO_DURATION = video_info_extract(FINAL_URL, key="video")
         if LOCAL_FILE == 500: return await msg.edit("__Download Error.__ 🤷‍♂️")
     try:
         post_data = {'LOCAL_FILE':LOCAL_FILE, 'THUMB_URL':THUMB_URL, 'VIDEO_TITLE':VIDEO_TITLE, 'VIDEO_DURATION':VIDEO_DURATION, 'TYPE':'video'}
